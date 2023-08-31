@@ -3,20 +3,20 @@ using System;
 namespace IJunior {
     internal class Program {
         static void Main(string[] args) {
-            const double RateRubToCny = 0.0759;
-            const double RateCnyToRub = 13.17;
-            const double RateRubToUsd = 0.0106;
-            const double RateUsdToRub = 94.5;
-            const double RateCnyToUsd = 0.137;
-            const double RateUsdToCny = 7.29;
+            double RateRubToCny = 0.0759;
+            double RateCnyToRub = 13.17;
+            double RateRubToUsd = 0.0106;
+            double RateUsdToRub = 94.5;
+            double RateCnyToUsd = 0.137;
+            double RateUsdToCny = 7.29;
 
-            const string MenuConvertRubToCny = "1";
-            const string MenuConvertCnyToRub = "2";
-            const string MenuConvertRubToUsd = "3";
-            const string MenuConvertUsdToRub = "4";
-            const string MenuConvertCnyToUsd = "5";
-            const string MenuConvertUsdToCny = "6";
-            const string MenuExit = "exit";
+            string MenuConvertRubToCny = "1";
+            string MenuConvertCnyToRub = "2";
+            string MenuConvertRubToUsd = "3";
+            string MenuConvertUsdToRub = "4";
+            string MenuConvertCnyToUsd = "5";
+            string MenuConvertUsdToCny = "6";
+            string MenuExit = "exit";
 
             double rubBalance = 5000.0;
             double usdBalance = 100.0;
