@@ -9,16 +9,29 @@ namespace IJunior {
             const string CommandShowCurrentYear = "ShowYear";
             const string CommandShowCurrentDate = "ShowDate";
 
+            int january = 1;
+            int february = 2;
+            int march = 3;
+            int april = 4;
+            int may = 5;
+            int june = 6;
+            int july = 7;
+            int august = 8;
+            int september = 9;
+            int october = 10;
+            int november = 11;
+            int december = 12;
+
             string userCommand = "";
 
             while (userCommand != CommandExit) {
                 Console.Clear();
                 Console.WriteLine("Введите желаемую команду:" +
-                    "\nПоказать текущее число месяца - ShowDay" +
-                    "\nПоказать текущий месяц - ShowMonth" +
-                    "\nПоказать текущий год - ShowYear" +
-                    "\nПоказать текущую дату - ShowDate" +
-                    "\nВыйти из программы - Exit");
+                    $"\nПоказать текущее число месяца - {CommandShowCurrentDay}" +
+                    $"\nПоказать текущий месяц - {CommandShowCurrentMonth}" +
+                    $"\nПоказать текущий год - {CommandShowCurrentYear}" +
+                    $"\nПоказать текущую дату - {CommandShowCurrentDate}" +
+                    $"\nВыйти из программы - {CommandExit}");
                 userCommand = Console.ReadLine();
 
                 switch (userCommand) {
@@ -30,30 +43,29 @@ namespace IJunior {
                         break;
                     case CommandShowCurrentMonth:
                         string month;
-
-                        if (DateTime.Now.Month == 1)
+                        if (DateTime.Now.Month == january)
                             month = "январь";
-                        else if (DateTime.Now.Month == 2)
+                        else if (DateTime.Now.Month == february)
                             month = "февраль";
-                        else if (DateTime.Now.Month == 3)
+                        else if (DateTime.Now.Month == march)
                             month = "март";
-                        else if (DateTime.Now.Month == 4)
+                        else if (DateTime.Now.Month == april)
                             month = "апрель";
-                        else if (DateTime.Now.Month == 5)
+                        else if (DateTime.Now.Month == may)
                             month = "май";
-                        else if (DateTime.Now.Month == 6)
+                        else if (DateTime.Now.Month == june)
                             month = "июнь";
-                        else if (DateTime.Now.Month == 7)
+                        else if (DateTime.Now.Month == july)
                             month = "июль";
-                        else if (DateTime.Now.Month == 8)
+                        else if (DateTime.Now.Month == august)
                             month = "август";
-                        else if (DateTime.Now.Month == 9)
+                        else if (DateTime.Now.Month == september)
                             month = "сентябрь";
-                        else if (DateTime.Now.Month == 10)
+                        else if (DateTime.Now.Month == october)
                             month = "октябрь";
-                        else if (DateTime.Now.Month == 11)
+                        else if (DateTime.Now.Month == november)
                             month = "ноябрь";
-                        else if (DateTime.Now.Month == 12)
+                        else if (DateTime.Now.Month == december)
                             month = "декабрь";
                         else
                             month = "unknown";
