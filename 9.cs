@@ -8,7 +8,7 @@ namespace IJunior {
             int increment = 7;
 
             for (int i = startNumber; i <= lastNumber; i += increment) {
-                Console.Write(number + " ");
+                Console.Write(i + " ");
             }
         }
     }
