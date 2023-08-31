@@ -2,18 +2,22 @@ using System;
 
 namespace IJunior {
     internal class Program {
-        static void Main(string[] args) {
+        static void Main(string[] args) {            
+            int multipleOne = 3;
+            int multipleTwo = 5;
+            int maxNumberExcluded = 101;
+            
             Random random = new Random();
-            int randomNumber = random.Next(100);
+            int randomNumber = random.Next(maxNumberExcluded);
             int sum = 0;
 
-            for (int number = 3; number <= randomNumber; ++number) {
-                if (number % 3 == 0 || number % 5 == 0) {
-                    sum += number;
+            for (int i = 0; i <= randomNumber; ++i) {
+                if (i % multipleOne == 0 || i % multipleTwo == 0) {
+                    sum += i;
                 }
             }
 
-            Console.WriteLine($"Сумма чисел кратных 3 или 5 до {randomNumber} (включительно) равна: {sum}");
+            Console.WriteLine($"Сумма чисел кратных {multipleOne} или {multipleTwo} до {randomNumber} (включительно) равна: {sum}");
         }
     }
 }
