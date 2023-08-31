@@ -5,23 +5,17 @@ namespace IJunior {
         static void Main(string[] args) {
 
             string name = Console.ReadLine();
-            char symbol = (char)Console.Read();
+            char symbol = Console.ReadKey(true).KeyChar;
+            string middleRow = symbol + name + symbol;
+            string frameTopBottom = "";
 
-            int symbolsOffset = 2;
-            int symbolsInRow = name.Length + symbolsOffset;
-
-            for (int i = 0; i < symbolsInRow; ++i) {
-                Console.Write(symbol);
+            for (int i = 0; i < middleRow.Length; ++i) {
+                frameTopBottom += symbol;
             }
 
-            Console.WriteLine();
-            Console.WriteLine(symbol + name + symbol);
-
-            for (int i = 0; i < symbolsInRow; ++i) {
-                Console.Write(symbol);
-            }
-
-            Console.WriteLine();
+            Console.WriteLine(frameTopBottom);
+            Console.WriteLine(middleRow);
+            Console.WriteLine(frameTopBottom);
         }
     }
 }
