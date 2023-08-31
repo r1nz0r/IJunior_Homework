@@ -15,11 +15,11 @@ namespace IJunior {
             while (result <= number) {
                 ++pow;
                 result *= powBase;
-            }                
+            }
 
             Console.WriteLine($"Исходное число - {number}." +
-                $"\nПолученная степень двойки - {pow}" +
+                $"\nПолученная степень числа {powBase}: {pow}" +
                 $"\nПолученное число - {result}");
-        }        
+        }
     }
 }
