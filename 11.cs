@@ -1,40 +1,47 @@
 using System;
 
 namespace IJunior {
-    internal class Program {    
+    internal class Program {
         static void Main(string[] args) {
-            const double RubToCny = 0.0759;
-            const double CnyToRub = 13.17;
-            const double RubToUsd = 0.0106;
-            const double UsdToRub = 94.5;
-            const double CnyToUsd = 0.137;
-            const double UsdToCny = 7.29;
+            const double RateRubToCny = 0.0759;
+            const double RateCnyToRub = 13.17;
+            const double RateRubToUsd = 0.0106;
+            const double RateUsdToRub = 94.5;
+            const double RateCnyToUsd = 0.137;
+            const double RateUsdToCny = 7.29;
+
+            const string MenuConvertRubToCny = "1";
+            const string MenuConvertCnyToRub = "2";
+            const string MenuConvertRubToUsd = "3";
+            const string MenuConvertUsdToRub = "4";
+            const string MenuConvertCnyToUsd = "5";
+            const string MenuConvertUsdToCny = "6";
+            const string MenuExit = "exit";
 
             double rubBalance = 5000.0;
             double usdBalance = 100.0;
             double cnyBalance = 400.0;
 
-            while (true) {
+            string userInput = "";
+
+            while (userInput != "exit") {
                 Console.WriteLine("Добро пожаловать! У вас сейчас на балансе:" +
                 $"\nДолларов - {usdBalance}" +
                 $"\nРублей - {rubBalance}" +
                 $"\nЮаней - {cnyBalance}\n");
                 Console.WriteLine("Выберите операцию:" +
-                    "\n1 - Рубли в юани" +
-                    "\n2 - Юани в рубли" +
-                    "\n3 - Рубли в доллары" +
-                    "\n4 - Доллары в рубли" +
-                    "\n5 - Юани в доллары" +
-                    "\n6 - Доллары в юани" +
-                    "\nexit - Выход");
-                string userInput = Console.ReadLine().ToLower();
+                    $"\n{MenuConvertRubToCny} - Рубли в юани" +
+                    $"\n{MenuConvertCnyToRub} - Юани в рубли" +
+                    $"\n{MenuConvertRubToUsd} - Рубли в доллары" +
+                    $"\n{MenuConvertUsdToRub} - Доллары в рубли" +
+                    $"\n{MenuConvertCnyToUsd} - Юани в доллары" +
+                    $"\n{MenuConvertUsdToCny} - Доллары в юани" +
+                    $"\n{MenuExit} - Выход");
+                userInput = Console.ReadLine().ToLower();
                 Console.Clear();
 
-                if (userInput == "exit") {
-                    break;
-                }
-                else if (userInput == "1") {
-                    Console.WriteLine($"Конвертация рублей в юани по курсу {RubToCny} юаней за рубль");
+                if (userInput == MenuConvertRubToCny) {
+                    Console.WriteLine($"Конвертация рублей в юани по курсу {RateRubToCny} юаней за рубль");
                     Console.Write("Сколько рублей хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -43,12 +50,12 @@ namespace IJunior {
                     }
                     else {
                         rubBalance -= ammountCurrency;
-                        cnyBalance += ammountCurrency * RubToCny;
+                        cnyBalance += ammountCurrency * RateRubToCny;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == "2") {
-                    Console.WriteLine($"Конвертация юаней в рубли по курсу {CnyToRub} рублей за юань");
+                else if (userInput == MenuConvertCnyToRub) {
+                    Console.WriteLine($"Конвертация юаней в рубли по курсу {RateCnyToRub} рублей за юань");
                     Console.Write("Сколько юаней хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -57,12 +64,12 @@ namespace IJunior {
                     }
                     else {
                         cnyBalance -= ammountCurrency;
-                        rubBalance += ammountCurrency * CnyToRub;
+                        rubBalance += ammountCurrency * RateCnyToRub;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == "3") {
-                    Console.WriteLine($"Конвертация рублей в доллары по курсу {RubToUsd} долларов за рубль");
+                else if (userInput == MenuConvertRubToUsd) {
+                    Console.WriteLine($"Конвертация рублей в доллары по курсу {RateRubToUsd} долларов за рубль");
                     Console.Write("Сколько рублей хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -71,12 +78,12 @@ namespace IJunior {
                     }
                     else {
                         rubBalance -= ammountCurrency;
-                        usdBalance += ammountCurrency * RubToUsd;
+                        usdBalance += ammountCurrency * RateRubToUsd;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == "4") {
-                    Console.WriteLine($"Конвертация долларов в рубли по курсу {UsdToRub} рублей за доллар");
+                else if (userInput == MenuConvertUsdToRub) {
+                    Console.WriteLine($"Конвертация долларов в рубли по курсу {RateUsdToRub} рублей за доллар");
                     Console.Write("Сколько долларов хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -85,12 +92,12 @@ namespace IJunior {
                     }
                     else {
                         usdBalance -= ammountCurrency;
-                        rubBalance += ammountCurrency * UsdToRub;
+                        rubBalance += ammountCurrency * RateUsdToRub;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == "5") {
-                    Console.WriteLine($"Конвертация юаней в доллары по курсу {CnyToUsd} долларов за юань");
+                else if (userInput == MenuConvertCnyToUsd) {
+                    Console.WriteLine($"Конвертация юаней в доллары по курсу {RateCnyToUsd} долларов за юань");
                     Console.Write("Сколько юаней хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -99,12 +106,12 @@ namespace IJunior {
                     }
                     else {
                         cnyBalance -= ammountCurrency;
-                        usdBalance += ammountCurrency * CnyToUsd;
+                        usdBalance += ammountCurrency * RateCnyToUsd;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == "6") {
-                    Console.WriteLine($"Конвертация долларов в юани по курсу {UsdToCny} юаней за доллар");
+                else if (userInput == MenuConvertUsdToCny) {
+                    Console.WriteLine($"Конвертация долларов в юани по курсу {RateUsdToCny} юаней за доллар");
                     Console.Write("Сколько долларов хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
@@ -113,7 +120,7 @@ namespace IJunior {
                     }
                     else {
                         usdBalance -= ammountCurrency;
-                        cnyBalance += ammountCurrency * UsdToCny;
+                        cnyBalance += ammountCurrency * RateUsdToCny;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
