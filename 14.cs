@@ -9,18 +9,17 @@ namespace IJunior {
             int tryCount = 0;
             int maxTries = 3;
 
-            while (tryCount < maxTries) {
+            string userInput = "";
+
+            while (tryCount < maxTries && userInput != password) {
                 Console.Write("Введите пароль: ");
-                string userInput = Console.ReadLine();
+                userInput = Console.ReadLine();
 
-                if (userInput == password) {
+                if (userInput == password) 
                     Console.WriteLine(hiddenMessage);
-                    break;
-                }
-                else {
+                else 
                     Console.WriteLine($"Попытка №{++tryCount} неудачна. Осталось попыток: {maxTries - tryCount}");
-                }
-
+                
                 Console.WriteLine();
             }
         }
