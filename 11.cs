@@ -1,8 +1,11 @@
 using System;
 
-namespace IJunior {
-    internal class Program {
-        static void Main(string[] args) {
+namespace IJunior
+{
+    internal class Program
+    {
+        static void Main (string[] args)
+        {
             double RateRubToCny = 0.0759;
             double RateCnyToRub = 13.17;
             double RateRubToUsd = 0.0106;
@@ -24,7 +27,8 @@ namespace IJunior {
 
             string userInput = "";
 
-            while (userInput != "exit") {
+            while (userInput != MenuExit)
+            {
                 Console.WriteLine("Добро пожаловать! У вас сейчас на балансе:" +
                 $"\nДолларов - {usdBalance}" +
                 $"\nРублей - {rubBalance}" +
@@ -40,85 +44,103 @@ namespace IJunior {
                 userInput = Console.ReadLine().ToLower();
                 Console.Clear();
 
-                if (userInput == MenuConvertRubToCny) {
+                if (userInput == MenuConvertRubToCny)
+                {
                     Console.WriteLine($"Конвертация рублей в юани по курсу {RateRubToCny} юаней за рубль");
                     Console.Write("Сколько рублей хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > rubBalance) {
+                    if (ammountCurrency > rubBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         rubBalance -= ammountCurrency;
                         cnyBalance += ammountCurrency * RateRubToCny;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == MenuConvertCnyToRub) {
+                else if (userInput == MenuConvertCnyToRub)
+                {
                     Console.WriteLine($"Конвертация юаней в рубли по курсу {RateCnyToRub} рублей за юань");
                     Console.Write("Сколько юаней хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > cnyBalance) {
+                    if (ammountCurrency > cnyBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         cnyBalance -= ammountCurrency;
                         rubBalance += ammountCurrency * RateCnyToRub;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == MenuConvertRubToUsd) {
+                else if (userInput == MenuConvertRubToUsd)
+                {
                     Console.WriteLine($"Конвертация рублей в доллары по курсу {RateRubToUsd} долларов за рубль");
                     Console.Write("Сколько рублей хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > rubBalance) {
+                    if (ammountCurrency > rubBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         rubBalance -= ammountCurrency;
                         usdBalance += ammountCurrency * RateRubToUsd;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == MenuConvertUsdToRub) {
+                else if (userInput == MenuConvertUsdToRub)
+                {
                     Console.WriteLine($"Конвертация долларов в рубли по курсу {RateUsdToRub} рублей за доллар");
                     Console.Write("Сколько долларов хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > usdBalance) {
+                    if (ammountCurrency > usdBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         usdBalance -= ammountCurrency;
                         rubBalance += ammountCurrency * RateUsdToRub;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == MenuConvertCnyToUsd) {
+                else if (userInput == MenuConvertCnyToUsd)
+                {
                     Console.WriteLine($"Конвертация юаней в доллары по курсу {RateCnyToUsd} долларов за юань");
                     Console.Write("Сколько юаней хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > usdBalance) {
+                    if (ammountCurrency > usdBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         cnyBalance -= ammountCurrency;
                         usdBalance += ammountCurrency * RateCnyToUsd;
                         Console.WriteLine($"\nУспешный обмен.\n");
                     }
                 }
-                else if (userInput == MenuConvertUsdToCny) {
+                else if (userInput == MenuConvertUsdToCny)
+                {
                     Console.WriteLine($"Конвертация долларов в юани по курсу {RateUsdToCny} юаней за доллар");
                     Console.Write("Сколько долларов хотите обменять?: ");
                     double.TryParse(Console.ReadLine(), out double ammountCurrency);
 
-                    if (ammountCurrency > usdBalance) {
+                    if (ammountCurrency > usdBalance)
+                    {
                         Console.WriteLine("К сожалению на вашем балансе недостаточно средств.");
                     }
-                    else {
+                    else
+                    {
                         usdBalance -= ammountCurrency;
                         cnyBalance += ammountCurrency * RateUsdToCny;
                         Console.WriteLine($"\nУспешный обмен.\n");
