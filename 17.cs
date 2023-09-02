@@ -15,45 +15,42 @@ namespace IJunior
             char openBrackey = '(';
             char closeBrackey = ')';
 
-            int brackeysCount = 0;            
-            int currentOpenBrackeySequence = 0;
-            int currentCloseBrackeySequence = 0;
+            int brackeysCount = 0;
             int maxBrackeySequence = 0;
-            
+
+            int currentBrackeySequence = 1;            
+
             Console.Write("Введите последовательность скобок: ");
             string brackeys = Console.ReadLine();
+            char previousBrackey = ' ';
 
             foreach (var brackey in brackeys)
             {                
-
-                if (brackey == openBrackey)
-                {
-                    brackeysCount++;
-                    ++currentOpenBrackeySequence;
-                    currentCloseBrackeySequence = 0;
-                }
-                else if (brackey == closeBrackey && brackeysCount > 0)
-                {
-                    --brackeysCount;
-                    ++currentCloseBrackeySequence;
-                    currentOpenBrackeySequence = 0;
-                }
+                if (brackey == openBrackey)                
+                    brackeysCount++;                     
+                else if (brackey == closeBrackey && brackeysCount > 0)                
+                    --brackeysCount;                   
                 else
                 {
                     Console.WriteLine("Последовательность неверная.");
                     return;
                 }
 
-                if (currentOpenBrackeySequence > maxBrackeySequence)
-                    maxBrackeySequence = currentOpenBrackeySequence;
-                else if (currentCloseBrackeySequence > maxBrackeySequence)
-                    maxBrackeySequence = currentCloseBrackeySequence;
+                if (brackey == previousBrackey)
+                    ++currentBrackeySequence;
+                else
+                    currentBrackeySequence = 1;
+
+               if (currentBrackeySequence > maxBrackeySequence)
+                    maxBrackeySequence = currentBrackeySequence; 
+                
+                previousBrackey = brackey;
             }
 
             if (brackeysCount == 0)
                 Console.WriteLine("Последовательность верная. Максимальная глубина равняется " + maxBrackeySequence);
             else
                 Console.WriteLine("Последовательность неверная.");
-        }
+        }      
     }
 }
