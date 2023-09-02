@@ -15,12 +15,11 @@ namespace IJunior
             char openBrackey = '(';
             char closeBrackey = ')';
 
-            int brackeysCount = 0;
-            int maxBrackeySequence = 0;
-
+            int brackeysCount = 0;            
             int currentOpenBrackeySequence = 0;
             int currentCloseBrackeySequence = 0;
-
+            int maxBrackeySequence = 0;
+            
             Console.Write("Введите последовательность скобок: ");
             string brackeys = Console.ReadLine();
 
