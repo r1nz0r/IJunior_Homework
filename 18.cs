@@ -115,9 +115,9 @@ namespace IJunior
 
             Console.WriteLine();
 
-            if (playerHealth <= 0)
+            if (playerHealth <= 0 && bossHealth > 0)
                 Console.WriteLine("Увы, вы убиты...");
-            else if (bossHealth <= 0)
+            else if (bossHealth <= 0 && playerHealth > 0)
                 Console.WriteLine("Ура, босс повержен!");
             else
                 Console.WriteLine("Вы пали смертью храбрых, при этом забрав с собой босса.");
