@@ -9,8 +9,8 @@ namespace IJunior
 
         //Пример “(()(()))” - строка корректная и максимум глубины равняется 3.
         //Пример не верных строк: "(()", "())", ")(", "(()))(()"
-      
-        static void Main(string[] args)
+
+        static void Main (string[] args)
         {
             char openBrackey = '(';
             char closeBrackey = ')';
@@ -18,39 +18,33 @@ namespace IJunior
             int brackeysCount = 0;
             int maxBrackeySequence = 0;
 
-            int currentBrackeySequence = 1;            
-
             Console.Write("Введите последовательность скобок: ");
             string brackeys = Console.ReadLine();
-            char previousBrackey = ' ';
 
             foreach (var brackey in brackeys)
-            {                
-                if (brackey == openBrackey)                
-                    brackeysCount++;                     
-                else if (brackey == closeBrackey && brackeysCount > 0)                
-                    --brackeysCount;                   
+            {
+                if (brackey == openBrackey)
+                {
+                    brackeysCount++;
+                }
+                else if (brackey == closeBrackey && brackeysCount > 0)
+                {
+                    --brackeysCount;
+                }
                 else
                 {
                     Console.WriteLine("Последовательность неверная.");
                     return;
-                }
+                }                
 
-                if (brackey == previousBrackey)
-                    ++currentBrackeySequence;
-                else
-                    currentBrackeySequence = 1;
-
-               if (currentBrackeySequence > maxBrackeySequence)
-                    maxBrackeySequence = currentBrackeySequence; 
-                
-                previousBrackey = brackey;
+                if (brackeysCount > maxBrackeySequence)                
+                    maxBrackeySequence = brackeysCount;                
             }
 
             if (brackeysCount == 0)
                 Console.WriteLine("Последовательность верная. Максимальная глубина равняется " + maxBrackeySequence);
             else
                 Console.WriteLine("Последовательность неверная.");
-        }      
+        }
     }
 }
