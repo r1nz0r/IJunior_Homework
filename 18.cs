@@ -15,16 +15,16 @@ namespace IJunior
         // Заклинания должны иметь схожий характер, то есть иметь как одиночное действие, так и какие-то условия выполнения(пример - Хуганзакура).
         // Одно заклинание влияет на другое, тоже нужно для практики.Босс должен иметь возможность убить пользователя, возможна и ничья.
 
-        static void Main(string[] args)
+        static voId Main(string[] args)
         {
             Random random = new Random();
 
-            int sunStrikeSpellID = 1;
-            int iceBiteSpellID = 2;
-            int romashonSpellID = 3;
-            int hugandzakuraSpellID = 4;
-            int elvesStealthSpellID = 5;
-            int emptySpellID = 6;
+            int sunStrikeSpellId = 1;
+            int iceBiteSpellId = 2;
+            int romashonSpellId = 3;
+            int hugandzakuraSpellId = 4;
+            int elvesStealthSpellId = 5;
+            int emptySpellId = 6;
 
             string sunStrikeSpellName = "Луч солнца";
             string iceBiteSpellName = "Ледянящий укус";
@@ -52,19 +52,19 @@ namespace IJunior
                 Console.WriteLine($"\n\nЗдоровье игрока - {playerHealth};");
                 Console.WriteLine($"Здоровье босса - {bossHealth}");
 
-                int spellNumber = random.Next(sunStrikeSpellID, emptySpellID + 1);
+                int spellNumber = random.Next(sunStrikeSpellId, emptySpellId + 1);
 
-                if (spellNumber == sunStrikeSpellID)
+                if (spellNumber == sunStrikeSpellId)
                 {
                     bossHealth -= sunStrikeDamage;
                     Console.WriteLine($"Игрок использует заклинание \"{sunStrikeSpellName}\", нанося {sunStrikeDamage} единиц урона боссу.");
                 }
-                else if (spellNumber == iceBiteSpellID)
+                else if (spellNumber == iceBiteSpellId)
                 {
                     bossHealth -= iceBiteDamage;
                     Console.WriteLine($"Игрок использует заклинание \"{iceBiteSpellName}\", нанося {iceBiteDamage} единиц урона боссу.");
                 }
-                else if (spellNumber == romashonSpellID)
+                else if (spellNumber == romashonSpellId)
                 {
                     if (isRomashonActive)
                     {
@@ -77,13 +77,13 @@ namespace IJunior
                         Console.WriteLine($"Игрок активирует способность \"{romashonSpellName}\", принеся в жертву свои {romashonDamage} единиц здоровья.");
                     }
                 }
-                else if (isRomashonActive && spellNumber == hugandzakuraSpellID)
+                else if (isRomashonActive && spellNumber == hugandzakuraSpellId)
                 {
                     bossHealth -= hugandzakuraDamage;
                     isRomashonActive = false;
                     Console.WriteLine($"Игрок использует заклинание \"{hugandzakuraSpellName}\", нанося {hugandzakuraDamage} единиц урона боссу.");
                 }
-                else if (spellNumber == elvesStealthSpellID && isElvesStealthActive == false)
+                else if (spellNumber == elvesStealthSpellId && isElvesStealthActive == false)
                 {
                     if (isElvesStealthActive)
                     {
