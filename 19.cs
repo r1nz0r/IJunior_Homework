@@ -12,15 +12,25 @@ namespace IJunior
         {
             Random random = new Random();
 
-            int rows = random.Next(2, 5);
-            int columns = random.Next(2, 5);
+            int minRows = 2;
+            int maxRows = 6;
+            int minColumns = 2;
+            int maxColumns = 6;
+            int minArrayValue = 0;
+            int maxArrayValue = 10;
+
+            int rows = random.Next(minRows, maxRows);
+            int columns = random.Next(minColumns, maxColumns);
             int[,] array = new int[rows, columns];
 
-            for (int i = 0; i < rows; i++)
+            int zeroIndex = 0;
+            int firstIndex = 1;
+            
+            for (int i = 0; i < array.GetLength(zeroIndex); i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < array.GetLength(firstIndex); j++)
                 {
-                    array[i, j] = random.Next(0, 10);
+                    array[i, j] = random.Next(minArrayValue, maxArrayValue);
                     Console.Write(array[i, j] + " ");
                 }
 
@@ -29,20 +39,19 @@ namespace IJunior
 
             int sumRow = 0;
 
-            for (int i = 0; i < columns; i++)
+            for (int i = 0; i < array.GetLength(firstIndex); i++)
             {
-                sumRow += array[1, i];
+                sumRow += array[firstIndex, i];
             }
 
             int productColumn = 1;
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < array.GetLength(zeroIndex); i++)
             {
-                productColumn *= array[i, 0];
+                productColumn *= array[i, zeroIndex];
             }
 
             Console.WriteLine($"Сумма второй строки - {sumRow}, произведение первого столбца - {productColumn}");
-            Console.ReadKey();
         }
     }
 }
