@@ -16,13 +16,19 @@ namespace IJunior
             int columns = 10;
             int[,] array = new int[rows, columns];
 
+            int zero = 0;
+            int one = 1;
+
+            int minArrayNumber = 0;
+            int maxArrayNumber = 20;
+
             int maxNumber = int.MinValue;
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < array.GetLength(zero); i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < array.GetLength(one); j++)
                 {
-                    array[i, j] = random.Next(0, 20);
+                    array[i, j] = random.Next(minArrayNumber, maxArrayNumber);
 
                     if (array[i, j] > maxNumber)
                         maxNumber = array[i, j];
@@ -32,9 +38,9 @@ namespace IJunior
             Console.WriteLine("\nНаибольший элемент матрицы - " + maxNumber);
             Console.WriteLine("Исходная матрица:");
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < array.GetLength(zero); i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < array.GetLength(one); j++)
                 {
                     Console.Write(String.Format("{0,5}", array[i, j]));
                 }
@@ -42,12 +48,12 @@ namespace IJunior
                 Console.WriteLine();
             }
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < array.GetLength(zero); i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < array.GetLength(one); j++)
                 {
                     if (array[i, j] == maxNumber)
-                        array[i, j] = 0;
+                        array[i, j] = zero;
                 }
             }
 
