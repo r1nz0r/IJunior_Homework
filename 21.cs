@@ -24,10 +24,12 @@ namespace IJunior
             }
 
             int[] array = new int[arraySize];
+            int minArrayNumber = 0;
+            int maxArrayNumber = 20;
 
-            for (int i = 0; i < arraySize; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                array[i] = random.Next(0, 20);
+                array[i] = random.Next(minArrayNumber, maxArrayNumber);
                 Console.Write(array[i] + " ");
             }
 
@@ -43,14 +45,14 @@ namespace IJunior
                 if (array[0] > array[1])
                     Console.WriteLine("Локальный максимум - " + array[0]);
 
-                for (int i = 1; i < arraySize - 1; i++)
+                for (int i = 1; i < array.Length - 1; i++)
                 {
                     if (array[i] > array[i - 1] && array[i] > array[i + 1])
                         Console.WriteLine("Локальный максимум - " + array[i]);
                 }
 
-                if (array[arraySize - 1] > array[arraySize - 2])
-                    Console.WriteLine("Локальный максимум - " + array[arraySize - 1]);
+                if (array[arraySize - 1] > array[array.Length - 2])
+                    Console.WriteLine("Локальный максимум - " + array[array.Length - 1]);
             }
         }
     }
