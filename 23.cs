@@ -40,7 +40,6 @@ namespace IJunior
                         maxRepeatCount = currentRepeatCount;
                     }
                 }
-
                 else
                 {
                     currentRepeatCount = 1;
