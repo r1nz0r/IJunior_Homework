@@ -12,7 +12,8 @@ namespace IJunior
             Console.WriteLine("Введите строку текста: ");
             string text = Console.ReadLine();
 
-            string[] words = text.Split(' ');
+            char separator = ' ';
+            string[] words = text.Split(separator);
 
             foreach (var word in words)
             {
