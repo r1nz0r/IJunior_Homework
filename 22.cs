@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace IJunior
 {
@@ -14,18 +13,19 @@ namespace IJunior
 
         static void Main(string[] args)
         {
-            string CommandExit = "exit";
-            string CommandSum = "sum";
+            string commandExit = "exit";
+            string commandSum = "sum";
 
             int[] array = new int[0];
-            string userInput = "";
-            while (userInput != CommandExit)
-            {
-                Console.WriteLine("Введите число для добавления в массив, команду exit для выхода, " +
-                    "или команду sum для вывода суммы элементов массива");
-                userInput = Console.ReadLine();
+            bool isRunning = true;
 
-                if (userInput == CommandSum)
+            while (isRunning)
+            {
+                Console.WriteLine($"Введите число для добавления в массив, команду {commandExit} для выхода, " +
+                    $"или команду {commandSum} для вывода суммы элементов массива");
+                string userInput = Console.ReadLine();
+
+                if (userInput == commandSum)
                 {
                     if (array.Length != 0)
                     {
@@ -43,8 +43,11 @@ namespace IJunior
                         Console.WriteLine("Массив пуст, суммировать нечего.");
                     }
                 }
-
-                else if (userInput != CommandExit)
+                else if (userInput == commandExit)
+                {
+                    isRunning = false;
+                }
+                else
                 {
                     int number = Convert.ToInt32(userInput);
                     int[] tempArray = new int[array.Length + 1];
