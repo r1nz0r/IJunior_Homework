@@ -13,7 +13,7 @@ namespace IJunior
         // 4) поиск по фамилии
         // 5) выход
 
-        private static void Main (string[] args)
+        private static void Main(string[] args)
         {
             string menuAddDossier = "1";
             string menuPrintDossier = "2";
@@ -29,7 +29,13 @@ namespace IJunior
 
             while (userInput != menuExit)
             {
-                ShowMenu(menuAddDossier, menuPrintDossier, menuDeleteDossier, menuFindDossier, menuExit);
+                Console.Write("\nВам доступны следующие действия:" +
+                                $"\n{menuAddDossier} - Добавить досье." +
+                                $"\n{menuPrintDossier} - Вывести все имеющиеся досье." +
+                                $"\n{menuDeleteDossier} - Удалить досье." +
+                                $"\n{menuFindDossier} - Поиск по фамилии." +
+                                $"\n{menuExit} - Выход." +
+                                "\nВведите номер команды: ");
                 userInput = Console.ReadLine();
 
                 Console.WriteLine();
@@ -37,11 +43,11 @@ namespace IJunior
                 if (userInput == menuAddDossier)
                     AddDossier(ref fullNames, ref jobTitles);
                 else if (userInput == menuPrintDossier)
-                    PrintDossier(fullNames, jobTitles);
+                    PrintDossiers(fullNames, jobTitles);
                 else if (userInput == menuDeleteDossier)
-                    DeleteDossier(ref fullNames, ref jobTitles, GetSurname());
+                    DeleteDossiers(ref fullNames, ref jobTitles, GetSurname());
                 else if (userInput == menuFindDossier)
-                    FindDossier(fullNames, jobTitles, GetSurname());
+                    FindDossiers(fullNames, jobTitles, GetSurname());
                 else if (userInput == menuExit)
                     Console.WriteLine("Вы вышли из программы, всего доброго!");
                 else
@@ -49,22 +55,7 @@ namespace IJunior
             }
         }
 
-        private static void ShowMenu (string menuAddDossier,
-            string menuPrintDossier,
-            string menuDeleteDossier,
-            string menuFindDossier,
-            string menuExit)
-        {
-            Console.Write("\nВам доступны следующие действия:" +
-                                $"\n{menuAddDossier} - Добавить досье." +
-                                $"\n{menuPrintDossier} - Вывести все имеющиеся досье." +
-                                $"\n{menuDeleteDossier} - Удалить досье." +
-                                $"\n{menuFindDossier} - Поиск по фамилии." +
-                                $"\n{menuExit} - Выход." +
-                                "\nВведите номер команды: ");
-        }
-
-        private static void PrintDossier (string[] fullNames, string[] jobTitles)
+        private static void PrintDossiers(string[] fullNames, string[] jobTitles)
         {
             if (fullNames.Length == 0)
             {
@@ -73,14 +64,12 @@ namespace IJunior
             }
 
             for (int i = 0; i < fullNames.Length; ++i)
-                Console.WriteLine(fullNames[i] + " - " + jobTitles[i]);
+                Console.WriteLine($"{i + 1})  {fullNames[i]} - {jobTitles[i]}");
         }
 
-        private static string[] ResizeArray (string[] array, int newSize)
+        private static string[] ResizeArray(string[] array, int newSize)
         {
-            if (newSize == 0)
-                return new string[0];
-
+            newSize = newSize > 0 ? newSize : 0;
             var tempArray = new string[newSize];
             int minLength = array.Length <= tempArray.Length ? array.Length : tempArray.Length;
 
@@ -91,7 +80,7 @@ namespace IJunior
             return array;
         }
 
-        private static void AddDossier (ref string[] fullNames, ref string[] jobTitles)
+        private static void AddDossier(ref string[] fullNames, ref string[] jobTitles)
         {
             fullNames = ResizeArray(fullNames, fullNames.Length + 1);
             jobTitles = ResizeArray(jobTitles, jobTitles.Length + 1);
@@ -108,7 +97,7 @@ namespace IJunior
             Console.WriteLine($"Сотрудник {fullName} с должностью {jobTitle} успешно внесен в базу.");
         }
 
-        private static void DeleteDossier (ref string[] fullNames, ref string[] jobTitles, string surName)
+        private static void DeleteDossiers(ref string[] fullNames, ref string[] jobTitles, string surName)
         {
             if (fullNames.Length == 0)
             {
@@ -116,26 +105,32 @@ namespace IJunior
                 return;
             }
 
-            int dossierIndex = FindDossier(fullNames, jobTitles, surName);
+            bool isDossierFound = FindDossiers(fullNames, jobTitles, surName);
 
-            if (dossierIndex < 0)
+            if (isDossierFound == false)
             {
                 Console.WriteLine($"Не удалось удалить досье человека с фамилией {surName}.");
             }
             else
             {
-                fullNames = RemoveFromArray(fullNames, dossierIndex);
-                jobTitles = RemoveFromArray(jobTitles, dossierIndex);
+                int dossierIndex = GetDossierIndex(fullNames, surName);
 
-                Console.WriteLine($"Досье с фамилией {surName} удалено.");
+                while (dossierIndex >= 0)
+                {
+                    fullNames = RemoveFromArray(fullNames, dossierIndex);
+                    jobTitles = RemoveFromArray(jobTitles, dossierIndex);
+                    Console.WriteLine($"Досье с фамилией {surName} удалено.");
+
+                    dossierIndex = GetDossierIndex(fullNames, surName);
+                }
             }
         }
 
-        private static string[] RemoveFromArray (string[] array, int index)
+        private static string[] RemoveFromArray(string[] array, int index)
         {
             for (int i = index; i < array.Length - 1; ++i)
             {
-                var temp = array[i];
+                string temp = array[i];
                 array[i] = array[i + 1];
                 array[i + 1] = temp;
             }
@@ -143,26 +138,42 @@ namespace IJunior
             return ResizeArray(array, array.Length - 1);
         }
 
-        private static int FindDossier (string[] fullNames, string[] jobTitles, string surName)
+        private static bool FindDossiers(string[] fullNames, string[] jobTitles, string surName)
         {
+            bool isFound = false;
+
             for (int i = 0; i < fullNames.Length; i++)
             {
                 if (surName == fullNames[i].Split(' ')[0])
                 {
                     Console.WriteLine($"Досье найдено: {fullNames[i]} - {jobTitles[i]}.");
+                    isFound = true;
+                }
+            }
+
+            if (isFound == false)
+                Console.WriteLine($"Досье с фамилией {surName} не найдено.");
+            
+            return isFound;
+        }
+
+        private static int GetDossierIndex(string[] fullNames, string surName)
+        {
+            for (int i = 0; i < fullNames.Length; i++)
+            {
+                if (surName == fullNames[i].Split(' ')[0])
+                {
                     return i;
                 }
             }
 
-            Console.WriteLine($"Досье с фамилией {surName} не найдено.");
             return -1;
         }
 
-        private static string GetSurname ()
+        private static string GetSurname()
         {
             Console.Write("Введите фамилию сотрудника: ");
             return Console.ReadLine();
         }
-
     }
 }
