@@ -11,7 +11,7 @@ namespace IJunior
         //  Программа должна работать с массивом любого размера.
         //  Массив всех локальных максимумов не нужен.
 
-        static void Main(string[] args)
+        static void Main (string[] args)
         {
             Random random = new Random();
 
@@ -35,7 +35,7 @@ namespace IJunior
 
             Console.WriteLine();
 
-            if (arraySize == 1)
+            if (array.Length == 1)
             {
                 Console.WriteLine("Локальный максимум - " + array[0]);
                 return;
@@ -45,14 +45,16 @@ namespace IJunior
                 if (array[0] > array[1])
                     Console.WriteLine("Локальный максимум - " + array[0]);
 
-                for (int i = 1; i < array.Length - 1; i++)
+                int lastIndex = array.Length - 1;
+
+                for (int i = 1; i < lastIndex; i++)
                 {
                     if (array[i] > array[i - 1] && array[i] > array[i + 1])
                         Console.WriteLine("Локальный максимум - " + array[i]);
                 }
 
-                if (array[arraySize - 1] > array[array.Length - 2])
-                    Console.WriteLine("Локальный максимум - " + array[array.Length - 1]);
+                if (array[lastIndex] > array[lastIndex - 1])
+                    Console.WriteLine("Локальный максимум - " + array[lastIndex]);
             }
         }
     }
