@@ -21,14 +21,14 @@ namespace IJunior
 
             int rows = random.Next(minRows, maxRows);
             int columns = random.Next(minColumns, maxColumns);
-            int[,] numbersArray = new int[rows, columns];
+            int[,] numbers = new int[rows, columns];
 
-            for (int i = 0; i < numbersArray.GetLength(0); i++)
+            for (int i = 0; i < numbers.GetLength(0); i++)
             {
-                for (int j = 0; j < numbersArray.GetLength(1); j++)
+                for (int j = 0; j < numbers.GetLength(1); j++)
                 {
-                    numbersArray[i, j] = random.Next(minArrayValue, maxArrayValue);
-                    Console.Write(numbersArray[i, j] + " ");
+                    numbers[i, j] = random.Next(minArrayValue, maxArrayValue);
+                    Console.Write(numbers[i, j] + " ");
                 }
 
                 Console.WriteLine();
@@ -38,16 +38,16 @@ namespace IJunior
             int firstColumn = 0;
             int secondRow = 1;
 
-            for (int i = 0; i < numbersArray.GetLength(1); i++)
+            for (int i = 0; i < numbers.GetLength(1); i++)
             {
-                sumRow += numbersArray[secondRow, i];
+                sumRow += numbers[secondRow, i];
             }
 
             int productColumn = 1;
 
-            for (int i = 0; i < numbersArray.GetLength(0); i++)
+            for (int i = 0; i < numbers.GetLength(0); i++)
             {
-                productColumn *= numbersArray[i, firstColumn];
+                productColumn *= numbers[i, firstColumn];
             }
 
             Console.WriteLine($"Сумма второй строки - {sumRow}, произведение первого столбца - {productColumn}");
