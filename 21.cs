@@ -11,7 +11,7 @@ namespace IJunior
         //  Программа должна работать с массивом любого размера.
         //  Массив всех локальных максимумов не нужен.
 
-        static void Main (string[] args)
+        static void Main(string[] args)
         {
             Random random = new Random();
 
@@ -23,38 +23,38 @@ namespace IJunior
                 return;
             }
 
-            int[] array = new int[arraySize];
+            int[] numbers = new int[arraySize];
             int minArrayNumber = 0;
             int maxArrayNumber = 20;
 
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < numbers.Length; i++)
             {
-                array[i] = random.Next(minArrayNumber, maxArrayNumber);
-                Console.Write(array[i] + " ");
+                numbers[i] = random.Next(minArrayNumber, maxArrayNumber);
+                Console.Write(numbers[i] + " ");
             }
 
             Console.WriteLine();
 
-            if (array.Length == 1)
+            if (numbers.Length == 1)
             {
-                Console.WriteLine("Локальный максимум - " + array[0]);
+                Console.WriteLine("Локальный максимум - " + numbers[0]);
                 return;
             }
             else
             {
-                if (array[0] > array[1])
-                    Console.WriteLine("Локальный максимум - " + array[0]);
+                if (numbers[0] > numbers[1])
+                    Console.WriteLine("Локальный максимум - " + numbers[0]);
 
-                int lastIndex = array.Length - 1;
+                int lastIndex = numbers.Length - 1;
 
                 for (int i = 1; i < lastIndex; i++)
                 {
-                    if (array[i] > array[i - 1] && array[i] > array[i + 1])
-                        Console.WriteLine("Локальный максимум - " + array[i]);
+                    if (numbers[i] > numbers[i - 1] && numbers[i] > numbers[i + 1])
+                        Console.WriteLine("Локальный максимум - " + numbers[i]);
                 }
 
-                if (array[lastIndex] > array[lastIndex - 1])
-                    Console.WriteLine("Локальный максимум - " + array[lastIndex]);
+                if (numbers[lastIndex] > numbers[lastIndex - 1])
+                    Console.WriteLine("Локальный максимум - " + numbers[lastIndex]);
             }
         }
     }
