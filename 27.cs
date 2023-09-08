@@ -67,7 +67,7 @@ namespace IJunior
                 Console.WriteLine($"{i + 1})  {fullNames[i]} - {jobTitles[i]}");
         }
 
-        private static string[] ResizeArray (string[] array, int sizeChangeValue)
+        private static string[] ResizeArray (string[] array, int sizeChangeValue = 1)
         {
             int newSize = array.Length + sizeChangeValue;
             newSize = newSize > 0 ? newSize : 0;
