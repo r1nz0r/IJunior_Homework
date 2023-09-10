@@ -67,23 +67,20 @@ namespace IJunior
                 Console.WriteLine($"{i + 1})  {fullNames[i]} - {jobTitles[i]}");
         }
 
-        private static string[] ResizeArray(string[] array, int sizeChangeValue = 1)
+        private static void IncreaseArraySize(ref string[] array, int newElementsCount = 1)
         {
-            int newSize = array.Length + sizeChangeValue;
-            newSize = newSize > 0 ? newSize : 0;
-            var tempArray = new string[newSize];
-            int minLength = array.Length <= tempArray.Length ? array.Length : tempArray.Length;
+            var tempArray = new string[array.Length + newElementsCount];
 
-            for (int i = 0; i < minLength; ++i)
+            for (int i = 0; i < array.Length; ++i)
                 tempArray[i] = array[i];
 
-            return tempArray;
+            array = tempArray;
         }
 
         private static void AddDossier(ref string[] fullNames, ref string[] jobTitles)
         {
-            fullNames = ResizeArray(fullNames, 1);
-            jobTitles = ResizeArray(jobTitles, 1);
+            IncreaseArraySize(ref fullNames);
+            IncreaseArraySize(ref jobTitles);
 
             Console.Write("Введите ФИО нового сотрудника: ");
             string fullName = Console.ReadLine();
@@ -140,9 +137,9 @@ namespace IJunior
             {
                 if (fullNames[dossierIndex].Contains(surName))
                 {
-                    fullNames = RemoveFromArray(fullNames, dossierIndex);
-                    jobTitles = RemoveFromArray(jobTitles, dossierIndex);
-                    Console.WriteLine($"Досье {dossierIndex}) с фамилией {surName} удалено.");
+                    RemoveFromArray(ref fullNames, dossierIndex);
+                    RemoveFromArray(ref jobTitles, dossierIndex);
+                    Console.WriteLine($"Досье {dossierIndex + 1}) с фамилией {surName} удалено.");
                 }
                 else
                 {
@@ -161,15 +158,15 @@ namespace IJunior
 
             while (dossierIndex >= 0)
             {
-                fullNames = RemoveFromArray(fullNames, dossierIndex);
-                jobTitles = RemoveFromArray(jobTitles, dossierIndex);
-                Console.WriteLine($"Досье {dossierIndex + 1}) с фамилией {surName} удалено.");
-
+                RemoveFromArray(ref fullNames, dossierIndex);
+                RemoveFromArray(ref jobTitles, dossierIndex);
                 dossierIndex = GetDossierIndex(fullNames, surName);
             }
+
+            Console.WriteLine($"Все досье с фамилией {surName} удалены.");
         }
 
-        private static string[] RemoveFromArray(string[] array, int index)
+        private static void RemoveFromArray(ref string[] array, int index)
         {
             for (int i = index; i < array.Length - 1; ++i)
             {
@@ -178,7 +175,14 @@ namespace IJunior
                 array[i + 1] = temp;
             }
 
-            return ResizeArray(array, -1);
+            int newLength = array.Length - 1;
+            newLength = newLength > 0 ? newLength : 0;
+            var tempArray = new string[newLength];
+
+            for (int i = 0; i < tempArray.Length; ++i)
+                tempArray[i] = array[i];
+
+            array = tempArray;
         }
 
         private static bool CanFindDossiers(string[] fullNames, string[] jobTitles, string surName)
@@ -209,7 +213,7 @@ namespace IJunior
             {
                 if (surName == fullNames[i].Split(separator)[0])
                 {
-                    return i;                   
+                    return i;
                 }
             }
 
