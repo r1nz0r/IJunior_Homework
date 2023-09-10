@@ -38,16 +38,16 @@ namespace IJunior
                                 "\nВведите номер команды: ");
                 userInput = Console.ReadLine();
 
-                Console.WriteLine();
+                Console.Clear();
 
                 if (userInput == menuAddDossier)
                     AddDossier(ref fullNames, ref jobTitles);
                 else if (userInput == menuPrintDossier)
                     PrintDossiers(fullNames, jobTitles);
                 else if (userInput == menuDeleteDossier)
-                    DeleteDossiers(ref fullNames, ref jobTitles, GetSurname());
+                    DeleteDossier(ref fullNames, ref jobTitles);
                 else if (userInput == menuFindDossier)
-                    CanFindDossiers(fullNames, jobTitles, GetSurname());
+                    FindDossiers(fullNames, jobTitles);
                 else if (userInput == menuExit)
                     Console.WriteLine("Вы вышли из программы, всего доброго!");
                 else
@@ -57,74 +57,49 @@ namespace IJunior
 
         private static void PrintDossiers(string[] fullNames, string[] jobTitles)
         {
-            if (fullNames.Length == 0)
-            {
-                Console.WriteLine("База данных пуста.");
+            if (IsDataBaseEmpty(fullNames))
                 return;
-            }
 
             for (int i = 0; i < fullNames.Length; ++i)
                 Console.WriteLine($"{i + 1})  {fullNames[i]} - {jobTitles[i]}");
         }
 
-        private static void IncreaseArraySize(ref string[] array, int newElementsCount = 1)
+        private static void AddElementToArray(ref string[] array, string newElement)
         {
-            var tempArray = new string[array.Length + newElementsCount];
+            var tempArray = new string[array.Length + 1];
 
             for (int i = 0; i < array.Length; ++i)
                 tempArray[i] = array[i];
 
+            tempArray[tempArray.Length - 1] = newElement;
             array = tempArray;
         }
 
         private static void AddDossier(ref string[] fullNames, ref string[] jobTitles)
         {
-            IncreaseArraySize(ref fullNames);
-            IncreaseArraySize(ref jobTitles);
-
             Console.Write("Введите ФИО нового сотрудника: ");
             string fullName = Console.ReadLine();
 
-            fullNames[fullNames.Length - 1] = fullName;
+            AddElementToArray(ref fullNames, fullName);
 
             Console.Write("Введите должность нового сотрудника: ");
             string jobTitle = Console.ReadLine();
 
-            jobTitles[jobTitles.Length - 1] = jobTitle;
+            AddElementToArray(ref jobTitles, jobTitle);
+
             Console.WriteLine($"Сотрудник {fullName} с должностью {jobTitle} успешно внесен в базу.");
         }
 
-        private static void DeleteDossiers(ref string[] fullNames, ref string[] jobTitles, string surName)
+        private static void DeleteDossier(ref string[] fullNames, ref string[] jobTitles)
         {
-            if (fullNames.Length == 0)
-            {
-                Console.WriteLine("База данных уже пуста!");
+            if (IsDataBaseEmpty(fullNames))
                 return;
-            }
 
-            bool isDossierFound = CanFindDossiers(fullNames, jobTitles, surName);
+            PrintDossiers(fullNames, jobTitles);
+            Console.WriteLine();
 
-            if (isDossierFound == false)
-            {
-                Console.WriteLine($"Не удалось удалить досье человека с фамилией {surName}.");
-            }
-            else
-            {
-                string commandDeleteAll = "all";
-                Console.WriteLine($"Выберие номер досье, которое хотите удалить, или введите 'all'," +
-                    $" чтобы удалить все досье с фамилией {surName}: ");
-                string userInput = Console.ReadLine();
-
-                if (userInput.ToLower() == commandDeleteAll)
-                    DeleteEverySurnameDossier(ref fullNames, ref jobTitles, surName);
-                else
-                    DeleteDossier(ref fullNames, ref jobTitles, surName, userInput);
-            }
-        }
-
-        private static void DeleteDossier(ref string[] fullNames, ref string[] jobTitles, string surName, string userInput)
-        {
-            if (int.TryParse(userInput, out int dossierIndex) == false)
+            Console.Write("Укажите номер досье, который нужно удалить: ");
+            if (int.TryParse(Console.ReadLine(), out int dossierIndex) == false)
             {
                 Console.WriteLine("Некорректный ввод!");
                 return;
@@ -135,35 +110,14 @@ namespace IJunior
 
             if (dossierIndex <= lastDossierIndex && dossierIndex >= 0)
             {
-                if (fullNames[dossierIndex].Contains(surName))
-                {
-                    RemoveFromArray(ref fullNames, dossierIndex);
-                    RemoveFromArray(ref jobTitles, dossierIndex);
-                    Console.WriteLine($"Досье {dossierIndex + 1}) с фамилией {surName} удалено.");
-                }
-                else
-                {
-                    Console.WriteLine($"Введенный вами номер не соответствует досье с фамилией {surName}");
-                }
+                RemoveFromArray(ref fullNames, dossierIndex);
+                RemoveFromArray(ref jobTitles, dossierIndex);
+                Console.WriteLine($"Досье успешно удалено.");
             }
             else
             {
                 Console.WriteLine("Досье с таким индексом не существует.");
             }
-        }
-
-        private static void DeleteEverySurnameDossier(ref string[] fullNames, ref string[] jobTitles, string surName)
-        {
-            int dossierIndex = GetDossierIndex(fullNames, surName);
-
-            while (dossierIndex >= 0)
-            {
-                RemoveFromArray(ref fullNames, dossierIndex);
-                RemoveFromArray(ref jobTitles, dossierIndex);
-                dossierIndex = GetDossierIndex(fullNames, surName);
-            }
-
-            Console.WriteLine($"Все досье с фамилией {surName} удалены.");
         }
 
         private static void RemoveFromArray(ref string[] array, int index)
@@ -185,10 +139,16 @@ namespace IJunior
             array = tempArray;
         }
 
-        private static bool CanFindDossiers(string[] fullNames, string[] jobTitles, string surName)
+        private static void FindDossiers(string[] fullNames, string[] jobTitles)
         {
+            if (IsDataBaseEmpty(fullNames))
+                return;
+
             bool isFound = false;
             char separator = ' ';
+
+            Console.Write("Введите фамилию сотрудника: ");
+            string surName = Console.ReadLine();
 
             for (int i = 0; i < fullNames.Length; i++)
             {
@@ -201,29 +161,17 @@ namespace IJunior
 
             if (isFound == false)
                 Console.WriteLine($"Досье с фамилией {surName} не найдено.");
-
-            return isFound;
         }
 
-        private static int GetDossierIndex(string[] fullNames, string surName)
+        private static bool IsDataBaseEmpty(string[] fullnames)
         {
-            char separator = ' ';
-
-            for (int i = 0; i < fullNames.Length; i++)
+            if (fullnames.Length == 0)
             {
-                if (surName == fullNames[i].Split(separator)[0])
-                {
-                    return i;
-                }
+                Console.WriteLine("База данных пуста.");
+                return true;
             }
 
-            return -1;
-        }
-
-        private static string GetSurname()
-        {
-            Console.Write("Введите фамилию сотрудника: ");
-            return Console.ReadLine();
+            return false;
         }
     }
 }
