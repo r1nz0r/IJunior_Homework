@@ -10,24 +10,36 @@ namespace IJunior
 
         private static void Main(string[] args)
         {
-            int manaPercent = 40, maxMana = 20;
-            int manaBarPoistionX = 0, manaBarPositionY = 0;
-            int ragePercent = 80, maxRage = 50;
-            int rageBarPoistionX = 0, rageBarPositionY = 1;
+            int mana = 5;
+            int maxMana = 20;
+            int manaBarPoistionX = 0;
+            int manaBarPositionY = 0;
+            int rage = 40;
+            int maxRage = 50;
+            int rageBarPoistionX = 0;
+            int rageBarPositionY = 1;        
+
+            int manaPercent = GetPercentFromValue(mana, maxMana);
+            int ragePercent = GetPercentFromValue(rage, maxRage);
 
             char symbolForBar = '_';
 
-            DrawBar(manaPercent, maxMana, ConsoleColor.Blue, manaBarPoistionX, manaBarPositionY, symbolForBar);
-            DrawBar(ragePercent, maxRage, ConsoleColor.Red, rageBarPoistionX, rageBarPositionY, symbolForBar);
+            DrawBar(manaPercent, ConsoleColor.Blue, manaBarPoistionX, manaBarPositionY, symbolForBar);
+            DrawBar(ragePercent, ConsoleColor.Red, rageBarPoistionX, rageBarPositionY, symbolForBar);
             Console.ReadKey();
         }
 
-        static void DrawBar(int percent, int maxValue, ConsoleColor color, int positionX, int positionY, char symbol)
+        private static int GetPercentFromValue(int value, int maxValue)
+        {
+            double percentFactor = 100;          
+            return Convert.ToInt32((double)value / maxValue * percentFactor);
+        }
+
+        private static void DrawBar(int percent, ConsoleColor color, int positionX, int positionY, char symbol)
         {
             ConsoleColor defaultColor = Console.BackgroundColor;
-
-            int percentFactor = 100;
-            int value = maxValue * percent / percentFactor;
+            int value = percent / 10;
+            int maxValue = 10;
 
             var barBuilder = new StringBuilder();
 
