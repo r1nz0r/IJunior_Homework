@@ -20,7 +20,7 @@ namespace IJunior
 
     class Program
     {
-        private static void Main ()
+        private static void Main()
         {
             Game game = new Game();
             game.Start();
@@ -52,27 +52,9 @@ namespace IJunior
             while (_isRunning)
             {
                 Console.Clear();
-                Console.WriteLine("Вам доступны следующие действия:" +
-                    $"\n{(int)Menu.TakeCard} - Взять одну карту с колоды." +
-                    $"\n{(int)Menu.TakeCards} - Взять несколько кард с колоды." +
-                    $"\n{(int)Menu.Stop} - Остановиться, вас устраивает количество взятых карт.");
-                menu = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
 
-                switch (menu)
-                {
-                    case Menu.TakeCard:
-                        _player.AddCardInHand(_deck);
-                        break;
-                    case Menu.TakeCards:
-                        _player.AddCardInHand(_deck, GetIntFromUserInput("Введите желаемое число карт: "));
-                        break;
-                    case Menu.Stop:
-                        Stop(ref _isRunning);
-                        break;
-                    default:
-                        Console.WriteLine("Неверная команда, повторите попытку снова.");
-                        break;
-                }
+                menu = SelectMenuItem();
+                ProcessMenuItem(menu);
 
                 if (_deck.IsEmpty())
                 {
@@ -87,14 +69,44 @@ namespace IJunior
             Console.ReadKey();
         }
 
-        private void Stop (ref bool isRunning)
+        private void ProcessMenuItem(Menu menu)
+        {
+            switch (menu)
+            {
+                case Menu.TakeCard:
+                    _player.AddCardInHand(_deck);
+                    break;
+                case Menu.TakeCards:
+                    _player.AddCardInHand(_deck, GetIntFromUserInput("Введите желаемое число карт: "));
+                    break;
+                case Menu.Stop:
+                    Stop(ref _isRunning);
+                    break;
+                default:
+                    Console.WriteLine("Неверная команда, повторите попытку снова.");
+                    break;
+            }
+        }
+
+        private Menu SelectMenuItem()
+        {
+            Menu menu;
+            Console.WriteLine("Вам доступны следующие действия:" +
+                                $"\n{(int)Menu.TakeCard} - Взять одну карту с колоды." +
+                                $"\n{(int)Menu.TakeCards} - Взять несколько кард с колоды." +
+                                $"\n{(int)Menu.Stop} - Остановиться, вас устраивает количество взятых карт.");
+            menu = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
+            return menu;
+        }
+
+        private void Stop(ref bool isRunning)
         {
             Console.Clear();
             Console.WriteLine("Вы решили остановиться.\n");
             isRunning = false;
         }
 
-        private int GetIntFromUserInput (string message)
+        private int GetIntFromUserInput(string message)
         {
             Console.Write(message);
             int number;
@@ -113,12 +125,12 @@ namespace IJunior
     {
         private readonly List<Card> _cards;
 
-        public Player ()
+        public Player()
         {
             _cards = new List<Card>();
         }
 
-        public void AddCardInHand (Deck deck, int numberOfCards = 1)
+        public void AddCardInHand(Deck deck, int numberOfCards = 1)
         {
             for (int i = 0; i < numberOfCards; ++i)
             {
@@ -134,7 +146,7 @@ namespace IJunior
             }
         }
 
-        public void PrintCards ()
+        public void PrintCards()
         {
             if (IsEmpty())
             {
@@ -148,7 +160,7 @@ namespace IJunior
                 Console.WriteLine($"{i + 1}) Подвид - {_cards[i].SubRace}, Сила - {_cards[i].Power}");
         }
 
-        public bool IsEmpty ()
+        public bool IsEmpty()
         {
             return _cards.Count == 0;
         }
@@ -159,7 +171,7 @@ namespace IJunior
         private readonly int _minPower = 1;
         private readonly int _maxPower = 16;
 
-        public Card (Random random)
+        public Card(Random random)
         {
             SubRace = (SubRace)random.Next((int)SubRace.Elf, (int)SubRace.None);
             Power = random.Next(_minPower, _maxPower);
@@ -176,7 +188,7 @@ namespace IJunior
 
         private readonly Stack<Card> _cards;
 
-        public Deck (int numberOfCards)
+        public Deck(int numberOfCards)
         {
             _cards = new Stack<Card>();
 
@@ -184,7 +196,7 @@ namespace IJunior
                 _cards.Push(new Card(random));
         }
 
-        public Card TakeNextCard ()
+        public Card TakeNextCard()
         {
             if (IsEmpty())
             {
@@ -195,7 +207,7 @@ namespace IJunior
             return _cards.Pop();
         }
 
-        public bool IsEmpty ()
+        public bool IsEmpty()
         {
             return _cards.Count == 0;
         }
