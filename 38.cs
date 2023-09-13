@@ -39,10 +39,10 @@ namespace IJunior
 
     class Renderer
     {
-        public void Print (List<Player> players)
-        {
+        public void Print (IReadOnlyList<Player> players)
+        {            
             foreach (var player in players)
-            {
+            {                
                 if (player.PositionY < 0 || player.PositionX < 0)
                 {
                     Console.SetCursorPosition(0, 0);
