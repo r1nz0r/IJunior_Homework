@@ -11,7 +11,7 @@ namespace IJunior
         // Создание самой БД не требуется, задание выполняется инструментами, которые вы уже изучили в рамках курса.
         // Но нужен класс, который содержит игроков и её можно назвать "База данных".
 
-        enum MenuCommand
+        enum Menu
         {
             ShowAllPlayers = 1,
             AddPlayer,
@@ -26,44 +26,44 @@ namespace IJunior
         {
             PlayersDataBase playersDataBase = new PlayersDataBase();
 
-            MenuCommand menuCommand = MenuCommand.None;
+            Menu menuCommand = Menu.None;
             bool isRunning = true;
 
             while (isRunning)
             {
                 Console.WriteLine("Вам доступны следующие операции с базой игроков:" +
-                    $"\n{(int)MenuCommand.ShowAllPlayers} - Показать всех игроков." +
-                    $"\n{(int)MenuCommand.AddPlayer} - Добавить игрока в базу." +
-                    $"\n{(int)MenuCommand.DeletePlayer} - Удалить игрока из базы." +
-                    $"\n{(int)MenuCommand.BanPlayer} - Забанить игрока по ID." +
-                    $"\n{(int)MenuCommand.UnbanPlayer} - Разбанить игрока по ID." +
-                    $"\n{(int)MenuCommand.Exit} - Выйти из программы.");
+                    $"\n{(int)Menu.ShowAllPlayers} - Показать всех игроков." +
+                    $"\n{(int)Menu.AddPlayer} - Добавить игрока в базу." +
+                    $"\n{(int)Menu.DeletePlayer} - Удалить игрока из базы." +
+                    $"\n{(int)Menu.BanPlayer} - Забанить игрока по ID." +
+                    $"\n{(int)Menu.UnbanPlayer} - Разбанить игрока по ID." +
+                    $"\n{(int)Menu.Exit} - Выйти из программы.");
 
-                menuCommand = (MenuCommand)GetIntFromUserInput("\nВведите номер команды меню: ");
+                menuCommand = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
 
                 Console.Clear();
 
                 switch (menuCommand)
                 {
-                    case MenuCommand.ShowAllPlayers:
+                    case Menu.ShowAllPlayers:
                         playersDataBase.Show();
                         break;
-                    case MenuCommand.AddPlayer:
+                    case Menu.AddPlayer:
                         playersDataBase.Add();
                         break;
-                    case MenuCommand.DeletePlayer:
+                    case Menu.DeletePlayer:
                         if (!playersDataBase.IsEmpty())
                             playersDataBase.Remove(GetIntFromUserInput("Введите ID игрока: "));
                         break;
-                    case MenuCommand.BanPlayer:
+                    case Menu.BanPlayer:
                         if (!playersDataBase.IsEmpty())
                             playersDataBase.Ban(GetIntFromUserInput("Введите ID игрока: "));
                         break;
-                    case MenuCommand.UnbanPlayer:
+                    case Menu.UnbanPlayer:
                         if (!playersDataBase.IsEmpty())
                             playersDataBase.Unban(GetIntFromUserInput("Введите ID игрока: "));
                         break;
-                    case MenuCommand.Exit:
+                    case Menu.Exit:
                         isRunning = false;
                         break;
                     default:
