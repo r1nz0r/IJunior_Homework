@@ -39,9 +39,8 @@ namespace IJunior
 
     class Renderer
     {
-        public void Print (in List<Player> players)
+        public void Print (List<Player> players)
         {
-            players.Add(new Player(4, 4, 'd'));
             foreach (var player in players)
             {
                 if (player.PositionY < 0 || player.PositionX < 0)
