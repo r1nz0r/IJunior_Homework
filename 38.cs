@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace IJunior
 {
@@ -12,10 +11,13 @@ namespace IJunior
 
         private static void Main ()
         {
-            Player[] players = new Player[] { new Player(5, 15, '@'), new Player(10, 10, '#'), new Player(-5, 10, 'p') };
+            List<Player> players = new List<Player>();
+            players.Add(new Player(5, 15, '@'));
+            players.Add(new Player(10, 10, '#'));
+            players.Add(new Player(-5, 10, 'p'));
 
-            Renderer renderer = new Renderer(players);
-            renderer.Print();
+            Renderer renderer = new Renderer();
+            renderer.Print(players);
 
             Console.ReadKey();
         }
@@ -37,23 +39,21 @@ namespace IJunior
 
     class Renderer
     {
-        private List<Player> _players = new List<Player>();
-
-        public Renderer (Player[] players) => _players.AddRange(players);
-
-        public void Print ()
+        public void Print (in List<Player> players)
         {
-            foreach (var player in _players)
+            players.Add(new Player(4, 4, 'd'));
+            foreach (var player in players)
             {
                 if (player.PositionY < 0 || player.PositionX < 0)
                 {
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine($"Невозможно отобразить игрока \'{player.Symbol}\', так как у него отрицательные координаты.");
-                    return;
                 }
-
-                Console.SetCursorPosition(player.PositionX, player.PositionY);
-                Console.WriteLine(player.Symbol);
+                else
+                {
+                    Console.SetCursorPosition(player.PositionX, player.PositionY);
+                    Console.WriteLine(player.Symbol);
+                }                
             }
         }
     }
