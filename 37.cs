@@ -21,7 +21,7 @@ namespace IJunior
 
     class Player
     {
-        public static int Ids;
+        private static int _ids;
 
         private string _name;
         private int _id;
@@ -29,14 +29,14 @@ namespace IJunior
 
         static Player ()
         {
-            Ids = 0;
+            _ids = 0;
         }
 
         public Player (string name, int health)
         {
             _name = name;
             _health = health;
-            _id = ++Ids;
+            _id = ++_ids;
         }
 
         public void ShowInfo ()
