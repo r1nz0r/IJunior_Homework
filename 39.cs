@@ -152,16 +152,14 @@ namespace IJunior
             for (int i = 0; i < _players.Count; ++i)
             {
                 if (_players[i].Id == id)
+                {
                     index = i;
+                    return true;
+                }
             }
 
-            if (index < 0)
-            {
-                Console.WriteLine($"Игрока с ID = {id} не существует.");
-                return false;
-            }
-
-            return true;
+            Console.WriteLine($"Игрока с ID = {id} не существует.");
+            return false;            
         }
 
         public bool IsEmpty ()
