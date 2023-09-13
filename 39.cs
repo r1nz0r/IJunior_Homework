@@ -38,7 +38,6 @@ namespace IJunior
                     $"\n{(int)Menu.BanPlayer} - Забанить игрока по ID." +
                     $"\n{(int)Menu.UnbanPlayer} - Разбанить игрока по ID." +
                     $"\n{(int)Menu.Exit} - Выйти из программы.");
-
                 menuCommand = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
 
                 Console.Clear();
