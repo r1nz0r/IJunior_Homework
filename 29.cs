@@ -26,7 +26,7 @@ namespace IJunior
             {
                 Console.Write("Введите число: ");
                 isCorrectInput = int.TryParse(Console.ReadLine(), out number);
-            } while (!isCorrectInput);
+            } while (isCorrectInput == false);
 
             return number;
         }
