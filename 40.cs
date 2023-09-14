@@ -184,7 +184,7 @@ namespace IJunior
 
     class Deck
     {
-        private readonly Random random = new Random();
+        private readonly Random _random = new Random();
 
         private readonly Stack<Card> _cards;
 
@@ -193,7 +193,7 @@ namespace IJunior
             _cards = new Stack<Card>();
 
             for (int i = 0; i < numberOfCards; ++i)
-                _cards.Push(new Card(random));
+                _cards.Push(new Card(_random));
         }
 
         public Card TakeNextCard()
