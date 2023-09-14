@@ -38,7 +38,7 @@ namespace IJunior
         private static int GetValueFromPercent(int percent, int maxValue)
         {
             double valueFactor = 0.01;
-            return Convert.ToInt32((double)maxValue * valueFactor * percent);
+            return Convert.ToInt32((maxValue * valueFactor * percent);
         }
 
         private static void DrawBar(int percent, ConsoleColor color, int positionX, int positionY, char symbol)
