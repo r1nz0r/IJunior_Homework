@@ -24,7 +24,7 @@ namespace IJunior
 
         private static void Main()
         {
-            Database playersDataBase = new Database();
+            Database playersDatabase = new Database();
 
             Menu menuCommand = Menu.None;
             bool isRunning = true;
@@ -45,19 +45,19 @@ namespace IJunior
                 switch (menuCommand)
                 {
                     case Menu.ShowAllPlayers:
-                        playersDataBase.Show();
+                        playersDatabase.Show();
                         break;
                     case Menu.AddPlayer:
-                        playersDataBase.Add();
+                        playersDatabase.Add();
                         break;
                     case Menu.DeletePlayer:
-                        playersDataBase.Remove(GetIntFromUserInput("Введите ID игрока: "));
+                        playersDatabase.Remove();
                         break;
                     case Menu.BanPlayer:
-                        playersDataBase.GetPlayer().Ban();
+                        ProcessBan(playersDatabase);
                         break;
                     case Menu.UnbanPlayer:
-                        playersDataBase.GetPlayer().Unban();
+                        ProcessUnban(playersDatabase);
                         break;
                     case Menu.Exit:
                         isRunning = false;
@@ -69,6 +69,18 @@ namespace IJunior
 
                 Console.WriteLine();
             }
+        }
+
+        private static void ProcessUnban(Database playersDatabase)
+        {
+            if (playersDatabase.TryGetPlayer(out Player player))
+                player.Unban();
+        }
+
+        private static void ProcessBan(Database playersDatabase)
+        {
+            if (playersDatabase.TryGetPlayer(out Player player))
+                player.Ban();
         }
 
         private static int GetIntFromUserInput(string message)
@@ -108,7 +120,7 @@ namespace IJunior
         public string Name
         {
             get => _name;
-            private set => _name = value ?? "DefaultName";
+            private set => _name = value == "" ? "DefaultName" : value;
         }
 
         public int Level
@@ -172,14 +184,12 @@ namespace IJunior
             return false;
         }
 
-        public void Remove(int id)
+        public void Remove()
         {
-            Player player = GetPlayer();
-
-            if (player != null)
+            if (TryGetPlayer(out Player player))
             {
                 _players.Remove(player);
-                Console.WriteLine($"Игрок с ID {id} успешно удален.");
+                Console.WriteLine($"Игрок с ID {player.Id} успешно удален.");
             }
         }
 
@@ -206,21 +216,27 @@ namespace IJunior
                     player.ShowInfo();
         }
 
-        public Player GetPlayer()
+        public bool TryGetPlayer(out Player player)
         {
+            player = null;
+
             if (IsEmpty())
-                return null;
+                return false;
 
             int id = GetIdFromUserInput();
 
             for (int i = 0; i < _players.Count; ++i)
             {
                 if (_players[i].Id == id)
-                    return _players[i];
+                {
+                    player = _players[i];
+                    return true;
+                }
             }
 
             Console.WriteLine($"Игрока с ID = {id} не существует.");
-            return null;
+
+            return false;
         }
 
         private static int GetIdFromUserInput()
