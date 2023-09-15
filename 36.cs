@@ -14,14 +14,15 @@ namespace IJunior
         // 3) удалить досье
         // 4) выход
 
-        private static void Main (string[] args)
+        private static void Main(string[] args)
         {
             string menuAddDossier = "1";
             string menuPrintDossier = "2";
             string menuDeleteDossier = "3";
             string menuExit = "4";
 
-            Dictionary<string, string> dossiers = new Dictionary<string, string>();
+            List<string> fullNames = new List<string>();
+            List<string> dossiers = new List<string>();
 
             Console.WriteLine("Добро пожаловать в базу данных работников цеха №302!");
             string userInput = "";
@@ -38,11 +39,11 @@ namespace IJunior
                 Console.Clear();
 
                 if (userInput == menuAddDossier)
-                    AddDossier(dossiers);
+                    AddDossier(fullNames, dossiers);
                 else if (userInput == menuPrintDossier)
-                    PrintDossiers(dossiers);
+                    PrintDossiers(fullNames, dossiers);
                 else if (userInput == menuDeleteDossier)
-                    DeleteDossier(dossiers);
+                    DeleteDossier(fullNames, dossiers);
                 else if (userInput == menuExit)
                     Console.WriteLine("Вы вышли из программы, всего доброго!");
                 else
@@ -50,34 +51,28 @@ namespace IJunior
             }
         }
 
-        private static void PrintDossiers (Dictionary<string, string> dossiers)
+        private static void PrintDossiers(List<string> fullNames, List<string> dossiers)
         {
             if (IsDossiersBaseEmpty(dossiers))
                 return;
 
-            int id = 1;
-
-            foreach (var dossier in dossiers)
-                Console.WriteLine($"{id++}) {dossier.Key} - {dossier.Value}");
+            for (int i = 0; i < dossiers.Count; ++i)
+            {
+                Console.WriteLine($"{i + 1}) {fullNames[i]} - {dossiers[i]}");
+            }
         }
 
-        private static void AddDossier (Dictionary<string, string> dossiers)
+        private static void AddDossier(List<string> fullNames, List<string> dossiers)
         {
             string fullName = GetUserInput("Введите ФИО нового сотрудника: ");
-
-            if (dossiers.ContainsKey(fullName))
-            {
-                Console.WriteLine("Сотрудник с такими ФИО уже есть в базе!");
-                return;
-            }
-
             string jobTitle = GetUserInput("Введите должность нового сотрудника: ");
 
-            dossiers.Add(fullName, jobTitle);
+            fullNames.Add(fullName);
+            dossiers.Add(jobTitle);
             Console.WriteLine($"Сотрудник {fullName} с должностью {jobTitle} успешно внесен в базу.");
         }
 
-        private static string GetUserInput (string message)
+        private static string GetUserInput(string message)
         {
             Console.Write(message);
             string userInput = Console.ReadLine();
@@ -85,29 +80,36 @@ namespace IJunior
             return userInput;
         }
 
-        private static void DeleteDossier (Dictionary<string, string> dossiers)
+        private static void DeleteDossier(List<string> fullNames, List<string> dossiers)
         {
             if (IsDossiersBaseEmpty(dossiers))
                 return;
 
-            PrintDossiers(dossiers);
+            PrintDossiers(fullNames, dossiers);
             Console.WriteLine();
 
-            string fullName = GetUserInput("Укажите полное ФИО досье, которое нужно удалить (с учетом капитализации слов): ");
+            int index;
 
-            if (!dossiers.ContainsKey(fullName))
+            while (int.TryParse(GetUserInput("Введите номер досье: "), out index) == false)
             {
-                Console.WriteLine("Досье с такими ФИО не найдено! Проверьте корректность ввода.");
+                Console.WriteLine();
+            }
+
+            --index;
+
+            if (index < 0 || index >= fullNames.Count)
+            {
+                Console.WriteLine("Неверный индекс досье.");
                 return;
             }
-            else
-            {
-                dossiers.Remove(fullName);
-                Console.WriteLine($"Досье {fullName} успешно удалено.");
-            }
+
+            fullNames.RemoveAt(index);
+            dossiers.RemoveAt(index);
+
+            Console.WriteLine($"Досье успешно удалено.");
         }
 
-        private static bool IsDossiersBaseEmpty (Dictionary<string, string> dossiers)
+        private static bool IsDossiersBaseEmpty(List<string> dossiers)
         {
             if (dossiers.Count == 0)
             {
