@@ -22,7 +22,7 @@ namespace IJunior
             None
         }
 
-        private static void Main ()
+        private static void Main()
         {
             Database playersDataBase = new Database();
 
@@ -51,16 +51,13 @@ namespace IJunior
                         playersDataBase.Add();
                         break;
                     case Menu.DeletePlayer:
-                        if (!playersDataBase.IsEmpty())
-                            playersDataBase.Remove(GetIntFromUserInput("Введите ID игрока: "));
+                        playersDataBase.Remove(GetIntFromUserInput("Введите ID игрока: "));
                         break;
                     case Menu.BanPlayer:
-                        if (!playersDataBase.IsEmpty())
-                            playersDataBase.Ban(playersDataBase.TryGetPlayer(GetIntFromUserInput("Введите ID игрока: ")));
+                        playersDataBase.GetPlayer().Ban();
                         break;
                     case Menu.UnbanPlayer:
-                        if (!playersDataBase.IsEmpty())
-                            playersDataBase.Unban(playersDataBase.TryGetPlayer(GetIntFromUserInput("Введите ID игрока: ")));
+                        playersDataBase.GetPlayer().Unban();
                         break;
                     case Menu.Exit:
                         isRunning = false;
@@ -74,7 +71,7 @@ namespace IJunior
             }
         }
 
-        private static int GetIntFromUserInput (string message)
+        private static int GetIntFromUserInput(string message)
         {
             Console.Write(message);
             int number;
@@ -95,10 +92,11 @@ namespace IJunior
 
         private string _name;
         private int _level;
+        private bool _isBanned;
 
-        static Player () => s_ids = 0;
+        static Player() => s_ids = 0;
 
-        public Player (string name, int level)
+        public Player(string name, int level)
         {
             Name = name;
             Id = ++s_ids;
@@ -119,30 +117,51 @@ namespace IJunior
             set => _level = value > 0 ? value : 0;
         }
 
-        public void ShowInfo (Database database)
+        public void Ban()
         {
-            string banStatus = GetBanStatus(database) ? "забанен" : "блокировка отсутствует";
-            Console.WriteLine($"Имя - {Name}, ID - {Id}, Уровень - {Level}, Статус блокировки - {banStatus}");
+            if (_isBanned == false)
+            {
+                _isBanned = true;
+                Console.WriteLine($"Игрок с ID {Id} успешно забанен.");
+            }
+            else
+            {
+                Console.WriteLine($"Игрок с ID {Id} уже находится в бан-листе.");
+            }
         }
 
-        public bool GetBanStatus (Database database) => database.IsInBanList(this);
+        public void Unban()
+        {
+            if (_isBanned)
+            {
+                _isBanned = false;
+                Console.WriteLine($"Игрок с ID {Id} успешно разбанен.");
+            }
+            else
+            {
+                Console.WriteLine($"Игрок с ID {Id} не находится в бан-листе.");
+            }
+        }
 
+        public void ShowInfo()
+        {
+            string banStatus = _isBanned ? "забанен" : "блокировка отсутствует";
+            Console.WriteLine($"Имя - {Name}, ID - {Id}, Уровень - {Level}, Статус блокировки - {banStatus}");
+        }
     }
 
     class Database
     {
         private readonly List<Player> _players;
-        private readonly List<Player> _bannedPlayers;
 
-        public Database ()
+        public Database()
         {
             _players = new List<Player>();
-            _bannedPlayers = new List<Player>();
         }
 
-        public Database (List<Player> players) => _players = players;
+        public Database(List<Player> players) => _players = players;
 
-        public bool IsEmpty ()
+        public bool IsEmpty()
         {
             if (_players.Count == 0)
             {
@@ -153,9 +172,9 @@ namespace IJunior
             return false;
         }
 
-        public void Remove (int id)
+        public void Remove(int id)
         {
-            Player player = TryGetPlayer(id);
+            Player player = GetPlayer();
 
             if (player != null)
             {
@@ -164,47 +183,7 @@ namespace IJunior
             }
         }
 
-        public void Ban (Player player)
-        {
-            if (player == null)
-                return;
-
-            if (_bannedPlayers.Contains(player) == false)
-            {
-                _bannedPlayers.Add(player);
-                Console.WriteLine($"Игрок с ID {player.Id} успешно забанен.");
-            }
-            else
-            {
-                Console.WriteLine($"Игрок с ID {player.Id} уже находится в бан-листе.");
-            }
-        }
-
-        public void Unban (Player player)
-        {
-            if (player == null)
-                return;
-
-            if (_bannedPlayers.Contains(player))
-            {
-                _bannedPlayers.Remove(player);
-                Console.WriteLine($"Игрок с ID {player.Id} успешно разбанен.");
-            }
-            else
-            {
-                Console.WriteLine($"Игрок с ID {player.Id} не обнаружен в бан-листе.");
-            }
-        }
-
-        public bool IsInBanList (Player player)
-        {
-            if (_bannedPlayers.Contains(player))
-                return true;
-
-            return false;
-        }
-
-        public void Add ()
+        public void Add()
         {
             string name = GetUserInput("Введите имя игрока: ");
             int level;
@@ -218,17 +197,22 @@ namespace IJunior
             _players.Add(new Player(name, level));
         }
 
-        public void Show ()
+        public void Show()
         {
             if (_players.Count == 0)
                 Console.WriteLine("База игроков пуста.");
             else
                 foreach (var player in _players)
-                    player.ShowInfo(this);
+                    player.ShowInfo();
         }
 
-        public Player TryGetPlayer (int id)
+        public Player GetPlayer()
         {
+            if (IsEmpty())
+                return null;
+
+            int id = GetIdFromUserInput();
+
             for (int i = 0; i < _players.Count; ++i)
             {
                 if (_players[i].Id == id)
@@ -239,12 +223,25 @@ namespace IJunior
             return null;
         }
 
-        private string GetUserInput (string message)
+        private static int GetIdFromUserInput()
+        {
+            Console.Write("Введите ID игрока: ");
+            int number;
+
+            while (!int.TryParse(Console.ReadLine(), out number))
+            {
+                Console.Clear();
+                Console.WriteLine("Ошибка ввода, повторите попытку.");
+            }
+
+            return number;
+        }
+
+        private string GetUserInput(string message)
         {
             Console.Write(message);
 
             return Console.ReadLine();
         }
-
     }
 }
