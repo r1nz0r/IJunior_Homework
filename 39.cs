@@ -11,90 +11,10 @@ namespace IJunior
         // Создание самой БД не требуется, задание выполняется инструментами, которые вы уже изучили в рамках курса.
         // Но нужен класс, который содержит игроков и её можно назвать "База данных".
 
-        enum Menu
-        {
-            ShowAllPlayers = 1,
-            AddPlayer,
-            DeletePlayer,
-            BanPlayer,
-            UnbanPlayer,
-            Exit,
-            None
-        }
-
         private static void Main()
         {
             Database playersDatabase = new Database();
-
-            Menu menuCommand = Menu.None;
-            bool isRunning = true;
-
-            while (isRunning)
-            {
-                Console.WriteLine("Вам доступны следующие операции с базой игроков:" +
-                    $"\n{(int)Menu.ShowAllPlayers} - Показать всех игроков." +
-                    $"\n{(int)Menu.AddPlayer} - Добавить игрока в базу." +
-                    $"\n{(int)Menu.DeletePlayer} - Удалить игрока из базы." +
-                    $"\n{(int)Menu.BanPlayer} - Забанить игрока по ID." +
-                    $"\n{(int)Menu.UnbanPlayer} - Разбанить игрока по ID." +
-                    $"\n{(int)Menu.Exit} - Выйти из программы.");
-                menuCommand = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
-
-                Console.Clear();
-
-                switch (menuCommand)
-                {
-                    case Menu.ShowAllPlayers:
-                        playersDatabase.Show();
-                        break;
-                    case Menu.AddPlayer:
-                        playersDatabase.Add();
-                        break;
-                    case Menu.DeletePlayer:
-                        playersDatabase.Remove();
-                        break;
-                    case Menu.BanPlayer:
-                        ProcessBan(playersDatabase);
-                        break;
-                    case Menu.UnbanPlayer:
-                        ProcessUnban(playersDatabase);
-                        break;
-                    case Menu.Exit:
-                        isRunning = false;
-                        break;
-                    default:
-                        Console.WriteLine("Неверная команда, повторите попытку снова.");
-                        break;
-                }
-
-                Console.WriteLine();
-            }
-        }
-
-        private void ProcessUnban(Database playersDatabase)
-        {
-            if (playersDatabase.TryGetPlayer(out Player player))
-                player.Unban();
-        }
-
-        private void ProcessBan(Database playersDatabase)
-        {
-            if (playersDatabase.TryGetPlayer(out Player player))
-                player.Ban();
-        }
-
-        private int GetIntFromUserInput(string message)
-        {
-            Console.Write(message);
-            int number;
-
-            while (int.TryParse(Console.ReadLine(), out number) == false)
-            {
-                Console.Clear();
-                Console.WriteLine("Ошибка ввода, повторите попытку.");
-            }
-
-            return number;
+            playersDatabase.Work();
         }
     }
 
@@ -164,6 +84,17 @@ namespace IJunior
 
     class Database
     {
+        public enum Menu
+        {
+            ShowAllPlayers = 1,
+            AddPlayer,
+            DeletePlayer,
+            BanPlayer,
+            UnbanPlayer,
+            Exit,
+            None
+        }
+
         private readonly List<Player> _players;
 
         public Database()
@@ -184,7 +115,54 @@ namespace IJunior
             return false;
         }
 
-        public void Remove()
+        public void Work()
+        {
+            Menu menuCommand = Menu.None;
+            bool isRunning = true;
+
+            while (isRunning)
+            {
+                Console.WriteLine("Вам доступны следующие операции с базой игроков:" +
+                    $"\n{(int)Menu.ShowAllPlayers} - Показать всех игроков." +
+                    $"\n{(int)Menu.AddPlayer} - Добавить игрока в базу." +
+                    $"\n{(int)Menu.DeletePlayer} - Удалить игрока из базы." +
+                    $"\n{(int)Menu.BanPlayer} - Забанить игрока по ID." +
+                    $"\n{(int)Menu.UnbanPlayer} - Разбанить игрока по ID." +
+                    $"\n{(int)Menu.Exit} - Выйти из программы.");
+                menuCommand = (Menu)GetIntFromUserInput("\nВведите номер команды меню: ");
+
+                Console.Clear();
+
+                switch (menuCommand)
+                {
+                    case Menu.ShowAllPlayers:
+                        Show();
+                        break;
+                    case Menu.AddPlayer:
+                        Add();
+                        break;
+                    case Menu.DeletePlayer:
+                        Remove();
+                        break;
+                    case Menu.BanPlayer:
+                        Ban();
+                        break;
+                    case Menu.UnbanPlayer:
+                        Unban();
+                        break;
+                    case Menu.Exit:
+                        isRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Неверная команда, повторите попытку снова.");
+                        break;
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        private void Remove()
         {
             if (TryGetPlayer(out Player player))
             {
@@ -193,7 +171,7 @@ namespace IJunior
             }
         }
 
-        public void Add()
+        private void Add()
         {
             string name = GetUserInput("Введите имя игрока: ");
             int level;
@@ -207,7 +185,7 @@ namespace IJunior
             _players.Add(new Player(name, level));
         }
 
-        public void Show()
+        private void Show()
         {
             if (_players.Count == 0)
                 Console.WriteLine("База игроков пуста.");
@@ -216,7 +194,7 @@ namespace IJunior
                     player.ShowInfo();
         }
 
-        public bool TryGetPlayer(out Player player)
+        private bool TryGetPlayer(out Player player)
         {
             player = null;
 
@@ -256,8 +234,33 @@ namespace IJunior
         private string GetUserInput(string message)
         {
             Console.Write(message);
-
             return Console.ReadLine();
+        }
+
+        private int GetIntFromUserInput(string message)
+        {
+            Console.Write(message);
+            int number;
+
+            while (int.TryParse(Console.ReadLine(), out number) == false)
+            {
+                Console.Clear();
+                Console.WriteLine("Ошибка ввода, повторите попытку.");
+            }
+
+            return number;
+        }
+
+        private void Ban()
+        {
+            if (TryGetPlayer(out Player player))
+                player.Ban();
+        }
+
+        private void Unban()
+        {
+            if (TryGetPlayer(out Player player))
+                player.Unban();
         }
     }
 }
