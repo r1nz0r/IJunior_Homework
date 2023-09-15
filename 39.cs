@@ -71,24 +71,24 @@ namespace IJunior
             }
         }
 
-        private static void ProcessUnban(Database playersDatabase)
+        private void ProcessUnban(Database playersDatabase)
         {
             if (playersDatabase.TryGetPlayer(out Player player))
                 player.Unban();
         }
 
-        private static void ProcessBan(Database playersDatabase)
+        private void ProcessBan(Database playersDatabase)
         {
             if (playersDatabase.TryGetPlayer(out Player player))
                 player.Ban();
         }
 
-        private static int GetIntFromUserInput(string message)
+        private int GetIntFromUserInput(string message)
         {
             Console.Write(message);
             int number;
 
-            while (!int.TryParse(Console.ReadLine(), out number))
+            while (int.TryParse(Console.ReadLine(), out number) == false)
             {
                 Console.Clear();
                 Console.WriteLine("Ошибка ввода, повторите попытку.");
@@ -198,7 +198,7 @@ namespace IJunior
             string name = GetUserInput("Введите имя игрока: ");
             int level;
 
-            while (!int.TryParse(GetUserInput("Введите уровень игрока: "), out level))
+            while (int.TryParse(GetUserInput("Введите уровень игрока: "), out level) == false)
             {
                 Console.Clear();
                 Console.WriteLine("Ошибка ввода, повторите попытку.");
@@ -239,12 +239,12 @@ namespace IJunior
             return false;
         }
 
-        private static int GetIdFromUserInput()
+        private int GetIdFromUserInput()
         {
             Console.Write("Введите ID игрока: ");
             int number;
 
-            while (!int.TryParse(Console.ReadLine(), out number))
+            while (int.TryParse(Console.ReadLine(), out number) == false)
             {
                 Console.Clear();
                 Console.WriteLine("Ошибка ввода, повторите попытку.");
