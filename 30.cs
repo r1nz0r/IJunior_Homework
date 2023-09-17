@@ -4,9 +4,9 @@ namespace IJunior
 {
     internal class Program
     {
-        // Найти наибольший элемент матрицы A(10,10) и записать ноль в те ячейки, где он находятся.
-        // Вывести наибольший элемент, исходную и полученную матрицу.
-        // Массив под измененную версию не нужен.
+        // Сделать игровую карту с помощью двумерного массива. Сделать функцию рисования карты.
+        // Помимо этого, дать пользователю возможность перемещаться по карте и взаимодействовать с элементами (например пользователь не может пройти сквозь стену).
+        // Все элементы являются обычными символами.
 
         static void Main (string[] args)
         {
@@ -60,23 +60,22 @@ namespace IJunior
         {
             ConsoleKey pressedKey = Console.ReadKey(true).Key;
 
+            playerMoveX = 0;
+            playerMoveY = 0;
+            
             switch (pressedKey)
             {
                 case ConsoleKey.W:
-                    playerMoveX = 0;
                     playerMoveY = -1;
                     break;
                 case ConsoleKey.S:
-                    playerMoveX = 0;
                     playerMoveY = 1;
                     break;
                 case ConsoleKey.A:
                     playerMoveX = -1;
-                    playerMoveY = 0;
                     break;
                 case ConsoleKey.D:
                     playerMoveX = 1;
-                    playerMoveY = 0;
                     break;
                 case ConsoleKey.Escape:
                     isPlaying = false;
