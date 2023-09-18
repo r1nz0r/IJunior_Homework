@@ -43,7 +43,7 @@ namespace IJunior
 
         public void PrintInfo()
         {
-            Console.Write($"");
+            Console.Write($"Автор - {Author}, Название - {Title}, Дата выхода - {ReleaseYear}, Всего страниц - {TotalPages}");
         }
     }
 
@@ -168,8 +168,8 @@ namespace IJunior
             {
                 for (int i = 0; i < _books.Count; ++i)
                 {
-                    Console.WriteLine($"{i + 1}) Автор - {_books[i].Author}, Название - {_books[i].Title}," +
-                        $" Дата выхода - {_books[i].ReleaseYear}, Всего страниц - {_books[i].TotalPages}");
+                    Console.Write($"{i + 1}) ");
+                    _books[i].PrintInfo();
                 }
             }
         }
@@ -251,8 +251,7 @@ namespace IJunior
                 if (bookAttribute.ToLower() == userInput.ToLower())
                 {
                     isBookFound = true;
-                    Console.WriteLine($"Автор - {book.Author}, Название - {book.Title}," +
-                    $" Дата выхода - {book.ReleaseYear}, Всего страниц - {book.TotalPages}");
+                    book.PrintInfo();
                 }
             }
 
