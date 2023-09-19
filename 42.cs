@@ -9,16 +9,16 @@ namespace IJunior
 
     class Program
     {
-        private static void Main()
+        private static void Main ()
         {
             string commandExit = "exit";
             string commandBuy = "buy";
 
-            Player player = new Player("Erta");
+            Player player = new Player("Erta", 300);
             Salesman salesman = new Salesman(new[] {
-                new Product("Кувшин"),
-                new Product("Орех"),
-                new Product("Меч") }
+                new Product("Кувшин", 100),
+                new Product("Орех", 30),
+                new Product("Меч", 250) }
             );
 
             string userInput = "";
@@ -27,7 +27,9 @@ namespace IJunior
             {
                 salesman.TryShowProducts();
                 Console.WriteLine();
-                player.ShowInventory();
+
+                player.TryShowProducts();
+                player.ShowBalance();
                 Console.WriteLine();
 
                 Console.WriteLine("Что вы хотите сделать?" +
@@ -47,18 +49,47 @@ namespace IJunior
         }
     }
 
-    class Player
+    abstract class Consumer
     {
-        private List<Product> _inventory;
-        private string _name;
+        protected List<Product> _products;
+        private int _money;
 
-        public Player(string name)
+        public Consumer ()
         {
-            _inventory = new List<Product>();
-            _name = name;
+            _products = new List<Product>();
         }
 
-        public void BuyProduct(Salesman salesman)
+        public Consumer (Product[] products)
+        {
+            _products = new List<Product>(products);
+        }
+
+        public int Money
+        {
+            get
+            {
+                return _money;
+            }
+            protected set
+            {
+                _money = value < 0 ? 0 : value;
+            }
+        }
+
+        public abstract bool TryShowProducts ();
+    }
+
+    class Player : Consumer
+    {
+        private string _name;
+
+        public Player (string name, int money)
+        {
+            _name = name;
+            Money = money;
+        }
+
+        public void BuyProduct (Salesman salesman)
         {
             Console.Clear();
 
@@ -71,14 +102,19 @@ namespace IJunior
             string userInput = Console.ReadLine();
 
             Product product;
-            bool isSuccess = salesman.TrySellProduct(userInput, out product);
+            bool isSuccess = salesman.TrySellProduct(userInput, Money, out product);
 
             Console.Clear();
 
             if (isSuccess)
             {
-                _inventory.Add(product);
+                Money -= product.Price;
+                _products.Add(product);
                 Console.WriteLine($"Поздравляем с приобретением {product.Name}!");
+            }
+            else if (Money < product.Price)
+            {
+                Console.WriteLine("Увы, на вашем балансе надостаточно средств.");
             }
             else
             {
@@ -86,47 +122,33 @@ namespace IJunior
             }
         }
 
-        public void ShowInventory()
-        {
-            if (_inventory.Count > 0)
-            {
-                Console.WriteLine($"Инвентарь игрока {_name}: ");
-
-                foreach (var item in _inventory)
-                    Console.WriteLine(item.Name);
-            }
-            else
-            {
-                Console.WriteLine($"Инвентарь игрока {_name} пуст.");
-            }
-        }
-    }
-
-    class Salesman
-    {
-        private List<Product> _products;
-
-        public Salesman(Product[] goods)
-        {
-            _products = new List<Product>(goods);
-        }
-
-        public bool TryShowProducts()
+        public override bool TryShowProducts ()
         {
             if (_products.Count > 0)
             {
-                Console.WriteLine("Список товаров на продажу:");
+                Console.WriteLine("Список предметов в инвентаре:");
 
                 foreach (var product in _products)
-                    Console.WriteLine(product.Name);
+                    Console.WriteLine($"{product.Name}");
+
                 return true;
             }
 
-            Console.WriteLine("Товары закончились.");
+            Console.WriteLine($"Инвентарь игрока {_name} пуст.");
             return false;
         }
 
-        public bool TrySellProduct(string productName, out Product product)
+        public void ShowBalance ()
+        {
+            Console.WriteLine($"Баланс игрока {_name}: {Money} у.е.");
+        }
+    }
+
+    class Salesman : Consumer
+    {
+        public Salesman (Product[] goods) : base(goods) { }
+
+        public bool TrySellProduct (string productName, int cashAmmount, out Product product)
         {
             product = null;
 
@@ -135,22 +157,45 @@ namespace IJunior
                 if (item.Name.ToLower() == productName.ToLower())
                 {
                     product = item;
-                    _products.Remove(item);
-                    return true;
+
+                    if (cashAmmount >= item.Price)
+                    {
+                        Money += item.Price;
+                        _products.Remove(item);
+                        return true;
+                    }
                 }
             }
 
+            return false;
+        }
+
+        public override bool TryShowProducts ()
+        {
+            if (_products.Count > 0)
+            {
+                Console.WriteLine("Список товаров на продажу:");
+
+                foreach (var product in _products)
+                    Console.WriteLine($"{product.Name} по цене {product.Price} у.е.");
+
+                return true;
+            }
+
+            Console.WriteLine("Товары закончились.");
             return false;
         }
     }
 
     class Product
     {
-        public Product(string name)
+        public Product (string name, int price)
         {
             Name = name;
+            Price = price;
         }
 
         public string Name { get; private set; }
+        public int Price { get; private set; }
     }
 }
