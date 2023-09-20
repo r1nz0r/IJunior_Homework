@@ -51,17 +51,17 @@ namespace IJunior
 
     abstract class Consumer
     {
-        protected List<Product> _products;
+        protected List<Product> Products;
         private int _money;
 
         public Consumer ()
         {
-            _products = new List<Product>();
+            Products = new List<Product>();
         }
 
         public Consumer (Product[] products)
         {
-            _products = new List<Product>(products);
+            Products = new List<Product>(products);
         }
 
         public int Money
@@ -101,34 +101,26 @@ namespace IJunior
             Console.WriteLine("Укажите название товара, который вы хотите приобрести: ");
             string userInput = Console.ReadLine();
 
-            Product product;
-            bool isSuccess = salesman.TrySellProduct(userInput, Money, out product);
+            bool isSuccess = salesman.TrySellProduct(userInput, Money, out Product product, out string message);
 
             Console.Clear();
 
             if (isSuccess)
             {
+                Products.Add(product);
                 Money -= product.Price;
-                _products.Add(product);
-                Console.WriteLine($"Поздравляем с приобретением {product.Name}!");
-            }
-            else if (Money < product.Price)
-            {
-                Console.WriteLine("Увы, на вашем балансе надостаточно средств.");
-            }
-            else
-            {
-                Console.WriteLine("Увы, такого товара нет.");
-            }
+            }            
+
+            Console.WriteLine(message);
         }
 
         public override bool TryShowProducts ()
         {
-            if (_products.Count > 0)
+            if (Products.Count > 0)
             {
                 Console.WriteLine("Список предметов в инвентаре:");
 
-                foreach (var product in _products)
+                foreach (var product in Products)
                     Console.WriteLine($"{product.Name}");
 
                 return true;
@@ -148,11 +140,11 @@ namespace IJunior
     {
         public Salesman (Product[] goods) : base(goods) { }
 
-        public bool TrySellProduct (string productName, int cashAmmount, out Product product)
+        public bool TrySellProduct (string productName, int cashAmmount, out Product product, out string message)
         {
             product = null;
 
-            foreach (var item in _products)
+            foreach (var item in Products)
             {
                 if (item.Name.ToLower() == productName.ToLower())
                 {
@@ -161,22 +153,30 @@ namespace IJunior
                     if (cashAmmount >= item.Price)
                     {
                         Money += item.Price;
-                        _products.Remove(item);
+                        Products.Remove(item);
+
+                        message = $"Поздравляем с приобретением {productName}!";
                         return true;
+                    }
+                    else
+                    {
+                        message = "У покупателя недостаточно денег.";
+                        return false;
                     }
                 }
             }
 
+            message = $"Предмета с названием {productName} нет.";
             return false;
         }
 
         public override bool TryShowProducts ()
         {
-            if (_products.Count > 0)
+            if (Products.Count > 0)
             {
                 Console.WriteLine("Список товаров на продажу:");
 
-                foreach (var product in _products)
+                foreach (var product in Products)
                     Console.WriteLine($"{product.Name} по цене {product.Price} у.е.");
 
                 return true;
