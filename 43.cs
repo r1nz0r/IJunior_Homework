@@ -15,7 +15,8 @@ namespace IJunior
     {
         private static void Main ()
         {
-
+            RailwayStation railwayStation = new RailwayStation();
+            railwayStation.Work();
 
             Console.ReadKey();
         }
@@ -24,31 +25,156 @@ namespace IJunior
     class RailwayStation
     {
         private Random _random;
-
-        private Queue<Train> _trains;
+        private Dictionary<string, Queue<Train>> _routes;
+        private int _minPassengersCount = 10;
+        private int _maxPassengersCount = 300;
 
         public RailwayStation ()
         {
             _random = new Random();
-            _trains = new Queue<Train>();
+            _routes = new Dictionary<string, Queue<Train>>();
         }
 
-        public void MakeRoute (string route)
+        public void Work ()
         {
-            _trains.Enqueue(new Train(_random, route));
+            string commandExit = "exit";
+            string commandSell = "sell";
+            string commandSend = "send";
+            string commandMakeRoute = "make route";
+
+            bool isRunning = true;
+
+            while (isRunning)
+            {
+                Console.WriteLine("Введите команду из списка для выполнения:");
+                Console.WriteLine($"{commandMakeRoute} - создать направление для поезда;");
+                Console.WriteLine($"{commandSell} - продать билеты на поезд;");
+                Console.WriteLine($"{commandSend} - сформировать поезд и отправить его в путь;");
+                Console.WriteLine($"{commandExit} - выйти из программы.");
+
+                string userInput = Console.ReadLine();
+                Console.Clear();
+
+                if (userInput == commandMakeRoute)
+                {
+                    MakeRoute();
+                }
+                else if (userInput == commandSell)
+                {
+                    SellTickets();
+                }
+                else if (userInput == commandSend)
+                {
+                    SendTrain();
+                }
+                else if (userInput == commandExit)
+                {
+                    isRunning = false;
+                    Console.WriteLine("Всего доброго!");
+                }
+                else
+                {
+                    Console.WriteLine("Неизвестная команда.");
+                }
+            }
         }
 
-        public void SellTickets (int passengersCount)
+        private string GetUserInput (string message)
         {
-            _trains.Peek().SetPassengersCount(passengersCount);
-        }  
+            Console.Write(message);
+            return Console.ReadLine();
+        }
 
-        public void SendTrain ()
+        private void MakeRoute ()
         {
-            Train train = _trains.Dequeue();
-            train.Make();
+            string route = GetUserInput("Укажите направление следования поезда (напр. Бийск - Барнаул): ");
 
-            Console.WriteLine($"Поезд, следующий по маршруту {train.Route}, отправлен в путь.");
+            if (_routes.ContainsKey(route.ToLower()) == false)
+                _routes.Add(route.ToLower(), new Queue<Train>());
+            else
+                Console.WriteLine("Такое направление уже есть!");
+        }
+
+        private void SellTickets ()
+        {
+            if (TryShowAllRoutes() == false)
+                return;
+
+            string route = GetUserInput("Укажите направление для продажи билетов: ");
+            Console.WriteLine();
+
+            if (_routes.ContainsKey(route))
+            {
+                int passengersCount = _random.Next(_minPassengersCount, _maxPassengersCount);
+
+                Train train = new Train(_random);
+                train.SetPassengersCount(passengersCount);
+                _routes[route].Enqueue(train);
+
+                Console.WriteLine($"На поезд, следующий по маршруту \"{route}\" продано {passengersCount} билетов.");
+            }
+            else
+            {
+                Console.WriteLine("Невозможно продать билет на этот маршрут.");
+            }
+        }
+
+        private void SendTrain ()
+        {
+            if (TryShowAllRoutes() == false)
+                return;
+
+            string route = GetUserInput("Укажите направление следования поезда (напр. Бийск - Барнаул): ");
+            Console.WriteLine();
+
+            if (TryGetTrain(route, out Train train))
+            {
+                train.Make();
+                Console.WriteLine($"Поезд следующий по маршруту \"{route}\" и состоящий из {train.GetCarriagesCount} вагонов отправлен в путь.\n");
+            }
+            else
+            {
+                Console.WriteLine("Невозможно отправить поезд.");
+            }
+        }
+
+        private bool TryShowAllRoutes ()
+        {
+            if (_routes.Count > 0)
+            {
+                Console.WriteLine("Доступны следующие направления следования поездов:");
+
+                foreach (var route in _routes.Keys)
+                    Console.WriteLine(route);
+
+                return true;
+            }
+
+            Console.WriteLine("Доступных направлений нет.");
+            return false;
+        }
+
+        private bool TryGetTrain (string route, out Train train)
+        {
+            if (_routes.ContainsKey(route.ToLower()))
+            {
+                if (_routes[route].Count > 0)
+                {
+                    train = _routes[route].Dequeue();
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("По данному направлению нет поездов");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Такого направления нет.");
+            }
+
+            train = null;
+            return false;
         }
     }
 
@@ -58,25 +184,22 @@ namespace IJunior
         private Random _random;
         private int _passengersCount;
 
-        public Train (Random random, string route)
+        public Train (Random random)
         {
             _random = random;
             _carriages = new List<Carriage>();
-            Route = route;
         }
 
-        public string Route { get; private set; }
-
-        public void SetPassengersCount(int passengersCount)
+        public void SetPassengersCount (int passengersCount)
         {
             _passengersCount = passengersCount;
         }
 
-        public void Make()
+        public void Make ()
         {
             int totalCapacity = 0;
-            int minCarriageCapacity = 50;
-            int maxCarriageCapacity = 200;
+            int minCarriageCapacity = 20;
+            int maxCarriageCapacity = 80;
 
             while (totalCapacity < _passengersCount)
             {
@@ -85,11 +208,13 @@ namespace IJunior
                 totalCapacity += capacity;
             }
         }
+
+        public int GetCarriagesCount => _carriages.Count;
     }
 
     class Carriage
     {
-        public Carriage(int capacity)
+        public Carriage (int capacity)
         {
             Capacity = capacity;
         }
