@@ -190,6 +190,8 @@ namespace IJunior
             _carriages = new List<Carriage>();
         }
 
+        public int GetCarriagesCount => _carriages.Count;
+
         public void SetPassengersCount (int passengersCount)
         {
             _passengersCount = passengersCount;
@@ -207,9 +209,7 @@ namespace IJunior
                 _carriages.Add(new Carriage(capacity));
                 totalCapacity += capacity;
             }
-        }
-
-        public int GetCarriagesCount => _carriages.Count;
+        }       
     }
 
     class Carriage
