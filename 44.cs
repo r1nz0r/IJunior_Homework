@@ -11,7 +11,7 @@ namespace IJunior
 
     class Program
     {
-        private static void Main ()
+        private static void Main()
         {
             Battlefield field = new Battlefield();
             bool isBattleFinished = false;
@@ -41,7 +41,7 @@ namespace IJunior
 
     abstract class Fighter
     {
-        public Fighter (string name, int health, int damage)
+        public Fighter(string name, int health, int damage)
         {
             Name = name;
             Health = health;
@@ -52,14 +52,14 @@ namespace IJunior
         public int Damage { get; private set; }
         public int Health { get; protected set; }
 
-        public void ShowStats ()
+        public void ShowStats()
         {
             Console.WriteLine($"Имя - {Name}; Жизни - {Health}; Урон - {Damage}");
         }
 
-        public virtual void Attack (Fighter target) => target.TakeDamage(Damage);
+        public virtual void Attack(Fighter target) => target.TakeDamage(Damage);
 
-        protected virtual void TakeDamage (int damage)
+        protected virtual void TakeDamage(int damage)
         {
             if (damage > 0)
                 Health -= damage;
@@ -74,12 +74,12 @@ namespace IJunior
         private int _requiredNumForDoubleAttack = 5;
         private int _randomMaxNumber = 12;
 
-        public Warrior (string name, int health, int damage, Random random) : base(name, health, damage)
+        public Warrior(string name, int health, int damage, Random random) : base(name, health, damage)
         {
             _random = random;
         }
 
-        public override void Attack (Fighter target)
+        public override void Attack(Fighter target)
         {
             base.Attack(target);
             int currentNum = _random.Next(0, _randomMaxNumber);
@@ -98,12 +98,12 @@ namespace IJunior
         private int _evasionChancePercent = 30;
         private int _randomMaxPercent = 100;
 
-        public Elf (string name, int health, int damage, Random random) : base(name, health, damage)
+        public Elf(string name, int health, int damage, Random random) : base(name, health, damage)
         {
             _random = random;
         }
 
-        protected override void TakeDamage (int damage)
+        protected override void TakeDamage(int damage)
         {
             int rolledChance = _random.Next(0, _randomMaxPercent);
 
@@ -120,7 +120,7 @@ namespace IJunior
         private double _maxDamageReducePercent = 70.0;
         private double _damageReducePercent;
 
-        public Knight (string name, int health, int damage, double damageReducePercent) : base(name, health, damage)
+        public Knight(string name, int health, int damage, double damageReducePercent) : base(name, health, damage)
         {
             DamageReducePercent = damageReducePercent;
         }
@@ -142,7 +142,7 @@ namespace IJunior
             }
         }
 
-        protected override void TakeDamage (int damage)
+        protected override void TakeDamage(int damage)
         {
             int reducedDamage = (int)(damage * (_maxPercent - _damageReducePercent) / _maxPercent);
 
@@ -157,14 +157,14 @@ namespace IJunior
         private int _healSpellManaCost = 20;
         private int _healAmmount;
         private int _maxHealth;
-        public Klirik (string name, int health, int damage, int mana, int healAmmount) : base(name, health, damage)
+        public Klirik(string name, int health, int damage, int mana, int healAmmount) : base(name, health, damage)
         {
             _maxHealth = Health;
             _mana = mana;
             _healAmmount = healAmmount;
         }
 
-        public override void Attack (Fighter target)
+        public override void Attack(Fighter target)
         {
             base.Attack(target);
 
@@ -174,7 +174,7 @@ namespace IJunior
             }
         }
 
-        private void Heal ()
+        private void Heal()
         {
             _mana -= _healSpellManaCost;
             Health += _healAmmount;
@@ -190,21 +190,23 @@ namespace IJunior
     {
         private int _roundsToTrippleAttack = 3;
         private int _roundsCounter = 0;
+        private int _additionalAttacks = 2;
 
-        public Berserk (string name, int health, int damage) : base(name, health, damage) { }
+        public Berserk(string name, int health, int damage) : base(name, health, damage) { }
 
-        public override void Attack (Fighter target)
+        public override void Attack(Fighter target)
         {
-            base.Attack(target);
+            int attacksCounter = 1;
 
             if (++_roundsCounter == _roundsToTrippleAttack)
             {
-                Console.WriteLine($"Ярость берсерка позволяет провести еще две атаки");
-                base.Attack(target);
-                base.Attack(target);
-
+                attacksCounter = _additionalAttacks;               
+                Console.WriteLine($"Ярость берсерка позволяет провести еще {_additionalAttacks} атаки");              
                 _roundsCounter = 0;
             }
+
+            for (int i = 0; i < attacksCounter; ++i)
+                base.Attack(target);
         }
     }
 
@@ -216,7 +218,7 @@ namespace IJunior
         private Fighter _secondFighter;
         private List<Fighter> _fighters = new List<Fighter>();
 
-        public Battlefield ()
+        public Battlefield()
         {
             _random = new Random();
 
@@ -227,22 +229,20 @@ namespace IJunior
             _fighters.Add(new Berserk("Берсерк", 170, 30));
         }
 
-        public bool TryChooceFighters ()
+        public bool TryChooceFighters()
         {
+            bool isSuccess = false;
 
-            do 
+            while (isSuccess == false)
             {
                 Console.WriteLine("Выберите первого бойца");
-            } 
-            while (TryChooseFighter(out _firstFighter) == false);
+                isSuccess = TryChooseFighter(out _firstFighter);
 
-            Console.Clear();
+                Console.Clear();
 
-            do
-            {
                 Console.WriteLine("\nВыберите второго бойца");
+                isSuccess = TryChooseFighter(out _secondFighter) && isSuccess;
             }
-            while (TryChooseFighter(out _secondFighter) == false);
 
             if (_firstFighter == null || _secondFighter == null)
             {
@@ -256,7 +256,7 @@ namespace IJunior
             }
         }
 
-        private void ShowFighters ()
+        private void ShowFighters()
         {
             Console.WriteLine("Список доступный бойцов");
 
@@ -267,7 +267,7 @@ namespace IJunior
             }
         }
 
-        public void Battle ()
+        public void Battle()
         {
             while (_firstFighter.Health > 0 && _secondFighter.Health > 0)
             {
@@ -282,7 +282,7 @@ namespace IJunior
             }
         }
 
-        public bool GetBattleResult ()
+        public bool GetBattleResult()
         {
             bool isFinished = false;
 
@@ -301,7 +301,7 @@ namespace IJunior
             return isFinished;
         }
 
-        private bool TryChooseFighter (out Fighter fighter)
+        private bool TryChooseFighter(out Fighter fighter)
         {
             ShowFighters();
             Console.Write("Введите номер бойца: ");
