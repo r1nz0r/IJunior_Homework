@@ -13,11 +13,11 @@ namespace IJunior
     {
         private static void Main ()
         {
+            Battlefield field = new Battlefield();
             bool isBattleFinished = false;
 
             while (isBattleFinished == false)
             {
-                Battlefield field = new Battlefield();
 
                 if (field.TryChooceFighters())
                 {
@@ -25,7 +25,11 @@ namespace IJunior
                     Console.ReadKey();
                     Console.Clear();
 
-                    field.Battle();                    
+                    field.Battle();
+                }
+                else
+                {
+                    break;
                 }
 
                 isBattleFinished = field.GetBattleResult();
@@ -44,11 +48,11 @@ namespace IJunior
             Damage = damage;
         }
 
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
+        public int Damage { get; private set; }
         public int Health { get; protected set; }
-        public int Damage { get; protected set; }
 
-        public virtual void ShowStats ()
+        public void ShowStats ()
         {
             Console.WriteLine($"Имя - {Name}; Жизни - {Health}; Урон - {Damage}");
         }
@@ -57,7 +61,10 @@ namespace IJunior
 
         protected virtual void TakeDamage (int damage)
         {
-            Health -= damage;
+            if (damage > 0)
+                Health -= damage;
+            else
+                Console.WriteLine("Ошибка, значение урона не может быть отрицательным.");
         }
     }
 
@@ -137,7 +144,7 @@ namespace IJunior
 
         protected override void TakeDamage (int damage)
         {
-            int reducedDamage = (int)(damage * (_maxPercent - _damageReducePercent) / _maxPercent);           
+            int reducedDamage = (int)(damage * (_maxPercent - _damageReducePercent) / _maxPercent);
 
             Console.WriteLine($"Тяжелые рыцарьские доспехи снижают полученный урон на {_damageReducePercent}%");
             base.TakeDamage(reducedDamage);
@@ -222,13 +229,20 @@ namespace IJunior
 
         public bool TryChooceFighters ()
         {
-            Console.WriteLine("Выберите первого бойца");
-            _firstFighter = ChooseFighter();
+
+            do 
+            {
+                Console.WriteLine("Выберите первого бойца");
+            } 
+            while (TryChooseFighter(out _firstFighter) == false);
 
             Console.Clear();
 
-            Console.WriteLine("Выберите второго бойца");
-            _secondFighter = ChooseFighter();
+            do
+            {
+                Console.WriteLine("\nВыберите второго бойца");
+            }
+            while (TryChooseFighter(out _secondFighter) == false);
 
             if (_firstFighter == null || _secondFighter == null)
             {
@@ -287,13 +301,13 @@ namespace IJunior
             return isFinished;
         }
 
-        private Fighter ChooseFighter ()
+        private bool TryChooseFighter (out Fighter fighter)
         {
             ShowFighters();
             Console.Write("Введите номер бойца: ");
             bool isNumber = int.TryParse(Console.ReadLine(), out int inputID);
 
-            Fighter fighter;
+            fighter = null;
 
             if (isNumber)
             {
@@ -302,12 +316,13 @@ namespace IJunior
                     fighter = _fighters[inputID - 1];
                     _fighters.Remove(fighter);
                     Console.WriteLine("Боец успешно выбран.");
-                    return fighter;
+                    return true;
                 }
             }
 
+            Console.Clear();
             Console.WriteLine("Ошибка ввода данных.");
-            return null;
+            return false;
         }
     }
 }
